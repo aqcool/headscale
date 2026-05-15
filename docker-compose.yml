@@ -1,0 +1,28 @@
+services:
+  headscale-v2:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "9090:9090"
+    volumes:
+      - headscale-data:/data
+    environment:
+      - TZ=UTC
+    restart: unless-stopped
+
+  webui:
+    build:
+      context: ./webui
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://headscale-v2:8080
+    depends_on:
+      - headscale-v2
+    restart: unless-stopped
+
+volumes:
+  headscale-data:

@@ -1,0 +1,90 @@
+package policy
+
+import (
+	"net/netip"
+	"time"
+
+	"github.com/juanfont/headscale-v2/internal/policy/matcher"
+	policyv2 "github.com/juanfont/headscale-v2/internal/policy/v2"
+	"github.com/juanfont/headscale-v2/internal/types"
+	"tailscale.com/tailcfg"
+	"tailscale.com/types/views"
+)
+
+type PolicyManager interface {
+	// Filter returns the current filter rules for the entire tailnet and the associated matchers.
+	Filter() ([]tailcfg.FilterRule, []matcher.Match)
+	// FilterForNode returns filter rules for a specific node, handling autogroup:self
+	FilterForNode(node types.NodeView) ([]tailcfg.FilterRule, error)
+	// MatchersForNode returns matchers for peer relationship determination (unreduced)
+	MatchersForNode(node types.NodeView) ([]matcher.Match, error)
+	// BuildPeerMap constructs peer relationship maps for the given nodes
+	BuildPeerMap(nodes views.Slice[types.NodeView]) map[types.NodeID][]types.NodeView
+	SSHPolicy(baseURL string, node types.NodeView) (*tailcfg.SSHPolicy, error)
+	// SSHCheckParams resolves the SSH check period for a (src, dst) pair
+	// from the current policy, avoiding trust of client-provided URL params.
+	SSHCheckParams(srcNodeID, dstNodeID types.NodeID) (time.Duration, bool)
+	SetPolicy(pol []byte) (bool, error)
+	SetUsers(users []types.User) (bool, error)
+	SetNodes(nodes views.Slice[types.NodeView]) (bool, error)
+	// NodeCanHaveTag reports whether the given node can have the given tag.
+	NodeCanHaveTag(node types.NodeView, tag string) bool
+
+	// TagExists reports whether the given tag is defined in the policy.
+	TagExists(tag string) bool
+
+	// NodeCanApproveRoute reports whether the given node can approve the given route.
+	NodeCanApproveRoute(node types.NodeView, route netip.Prefix) bool
+
+	// ViaRoutesForPeer computes via grant effects for a viewer-peer pair.
+	// It returns which routes should be included (peer is via-designated for viewer)
+	// and excluded (steered to a different peer). When no via grants apply,
+	// both fields are empty and the caller falls back to existing behavior.
+	ViaRoutesForPeer(viewer, peer types.NodeView) types.ViaRouteResult
+
+	Version() int
+	DebugString() string
+}
+
+// NewPolicyManager returns a new policy manager.
+func NewPolicyManager(pol []byte, users []types.User, nodes views.Slice[types.NodeView]) (PolicyManager, error) {
+	var (
+		polMan PolicyManager
+		err    error
+	)
+
+	polMan, err = policyv2.NewPolicyManager(pol, users, nodes)
+	if err != nil {
+		return nil, err
+	}
+
+	return polMan, err
+}
+
+// PolicyManagersForTest returns all available PostureManagers to be used
+// in tests to validate them in tests that try to determine that they
+// behave the same.
+func PolicyManagersForTest(pol []byte, users []types.User, nodes views.Slice[types.NodeView]) ([]PolicyManager, error) {
+	var polMans []PolicyManager
+
+	for _, pmf := range PolicyManagerFuncsForTest(pol) {
+		pm, err := pmf(users, nodes)
+		if err != nil {
+			return nil, err
+		}
+
+		polMans = append(polMans, pm)
+	}
+
+	return polMans, nil
+}
+
+func PolicyManagerFuncsForTest(pol []byte) []func([]types.User, views.Slice[types.NodeView]) (PolicyManager, error) {
+	polmanFuncs := make([]func([]types.User, views.Slice[types.NodeView]) (PolicyManager, error), 0, 1)
+
+	polmanFuncs = append(polmanFuncs, func(u []types.User, n views.Slice[types.NodeView]) (PolicyManager, error) {
+		return policyv2.NewPolicyManager(pol, u, n)
+	})
+
+	return polmanFuncs
+}

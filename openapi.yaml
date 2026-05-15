@@ -1,0 +1,920 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: ""
+    version: 0.0.1
+paths:
+    /api/v1/apikey:
+        get:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_ListApiKeys
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.ListApiKeysResponse'
+        post:
+            tags:
+                - HeadscaleService
+            description: '--- ApiKeys start ---'
+            operationId: HeadscaleService_CreateApiKey
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/headscale.v1.CreateApiKeyRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.CreateApiKeyResponse'
+    /api/v1/apikey/expire:
+        post:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_ExpireApiKey
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/headscale.v1.ExpireApiKeyRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.ExpireApiKeyResponse'
+    /api/v1/apikey/{prefix}:
+        delete:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_DeleteApiKey
+            parameters:
+                - name: prefix
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: id
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.DeleteApiKeyResponse'
+    /api/v1/auth/approve:
+        post:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_AuthApprove
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/headscale.v1.AuthApproveRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.AuthApproveResponse'
+    /api/v1/auth/register:
+        post:
+            tags:
+                - HeadscaleService
+            description: '--- Auth start ---'
+            operationId: HeadscaleService_AuthRegister
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/headscale.v1.AuthRegisterRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.AuthRegisterResponse'
+    /api/v1/auth/reject:
+        post:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_AuthReject
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/headscale.v1.AuthRejectRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.AuthRejectResponse'
+    /api/v1/debug/node:
+        post:
+            tags:
+                - HeadscaleService
+            description: '--- Node start ---'
+            operationId: HeadscaleService_DebugCreateNode
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/headscale.v1.DebugCreateNodeRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.DebugCreateNodeResponse'
+    /api/v1/health:
+        get:
+            tags:
+                - HeadscaleService
+            description: '--- Health start ---'
+            operationId: HeadscaleService_Health
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.HealthResponse'
+    /api/v1/node:
+        get:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_ListNodes
+            parameters:
+                - name: user
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.ListNodesResponse'
+    /api/v1/node/backfillips:
+        post:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_BackfillNodeIPs
+            parameters:
+                - name: confirmed
+                  in: query
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.BackfillNodeIPsResponse'
+    /api/v1/node/register:
+        post:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_RegisterNode
+            parameters:
+                - name: user
+                  in: query
+                  schema:
+                    type: string
+                - name: key
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.RegisterNodeResponse'
+    /api/v1/node/{nodeId}:
+        get:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_GetNode
+            parameters:
+                - name: nodeId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.GetNodeResponse'
+        delete:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_DeleteNode
+            parameters:
+                - name: nodeId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.DeleteNodeResponse'
+    /api/v1/node/{nodeId}/approve_routes:
+        post:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_SetApprovedRoutes
+            parameters:
+                - name: nodeId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/headscale.v1.SetApprovedRoutesRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.SetApprovedRoutesResponse'
+    /api/v1/node/{nodeId}/expire:
+        post:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_ExpireNode
+            parameters:
+                - name: nodeId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: expiry
+                  in: query
+                  schema:
+                    type: string
+                    format: date-time
+                - name: disableExpiry
+                  in: query
+                  description: When true, sets expiry to null (node will never expire).
+                  schema:
+                    type: boolean
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.ExpireNodeResponse'
+    /api/v1/node/{nodeId}/rename/{newName}:
+        post:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_RenameNode
+            parameters:
+                - name: nodeId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: newName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.RenameNodeResponse'
+    /api/v1/node/{nodeId}/tags:
+        post:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_SetTags
+            parameters:
+                - name: nodeId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/headscale.v1.SetTagsRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.SetTagsResponse'
+    /api/v1/policy:
+        get:
+            tags:
+                - HeadscaleService
+            description: '--- Policy start ---'
+            operationId: HeadscaleService_GetPolicy
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.GetPolicyResponse'
+        put:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_SetPolicy
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/headscale.v1.SetPolicyRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.SetPolicyResponse'
+    /api/v1/preauthkey:
+        get:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_ListPreAuthKeys
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.ListPreAuthKeysResponse'
+        post:
+            tags:
+                - HeadscaleService
+            description: '--- PreAuthKeys start ---'
+            operationId: HeadscaleService_CreatePreAuthKey
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/headscale.v1.CreatePreAuthKeyRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.CreatePreAuthKeyResponse'
+        delete:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_DeletePreAuthKey
+            parameters:
+                - name: id
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.DeletePreAuthKeyResponse'
+    /api/v1/preauthkey/expire:
+        post:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_ExpirePreAuthKey
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/headscale.v1.ExpirePreAuthKeyRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.ExpirePreAuthKeyResponse'
+    /api/v1/user:
+        get:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_ListUsers
+            parameters:
+                - name: id
+                  in: query
+                  schema:
+                    type: string
+                - name: name
+                  in: query
+                  schema:
+                    type: string
+                - name: email
+                  in: query
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.ListUsersResponse'
+        post:
+            tags:
+                - HeadscaleService
+            description: '--- User start ---'
+            operationId: HeadscaleService_CreateUser
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/headscale.v1.CreateUserRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.CreateUserResponse'
+    /api/v1/user/{id}:
+        delete:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_DeleteUser
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.DeleteUserResponse'
+    /api/v1/user/{oldId}/rename/{newName}:
+        post:
+            tags:
+                - HeadscaleService
+            operationId: HeadscaleService_RenameUser
+            parameters:
+                - name: oldId
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+                - name: newName
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/headscale.v1.RenameUserResponse'
+    /helloworld/{name}:
+        get:
+            tags:
+                - Greeter
+            description: Sends a greeting
+            operationId: Greeter_SayHello
+            parameters:
+                - name: name
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/helloworld.v1.HelloReply'
+components:
+    schemas:
+        headscale.v1.ApiKey:
+            type: object
+            properties:
+                id:
+                    type: string
+                prefix:
+                    type: string
+                expiration:
+                    type: string
+                    format: date-time
+                createdAt:
+                    type: string
+                    format: date-time
+                lastSeen:
+                    type: string
+                    format: date-time
+        headscale.v1.AuthApproveRequest:
+            type: object
+            properties:
+                authId:
+                    type: string
+        headscale.v1.AuthApproveResponse:
+            type: object
+            properties: {}
+        headscale.v1.AuthRegisterRequest:
+            type: object
+            properties:
+                user:
+                    type: string
+                authId:
+                    type: string
+        headscale.v1.AuthRegisterResponse:
+            type: object
+            properties:
+                node:
+                    $ref: '#/components/schemas/headscale.v1.Node'
+        headscale.v1.AuthRejectRequest:
+            type: object
+            properties:
+                authId:
+                    type: string
+        headscale.v1.AuthRejectResponse:
+            type: object
+            properties: {}
+        headscale.v1.BackfillNodeIPsResponse:
+            type: object
+            properties:
+                changes:
+                    type: array
+                    items:
+                        type: string
+        headscale.v1.CreateApiKeyRequest:
+            type: object
+            properties:
+                expiration:
+                    type: string
+                    format: date-time
+        headscale.v1.CreateApiKeyResponse:
+            type: object
+            properties:
+                apiKey:
+                    type: string
+        headscale.v1.CreatePreAuthKeyRequest:
+            type: object
+            properties:
+                user:
+                    type: string
+                reusable:
+                    type: boolean
+                ephemeral:
+                    type: boolean
+                expiration:
+                    type: string
+                    format: date-time
+                aclTags:
+                    type: array
+                    items:
+                        type: string
+        headscale.v1.CreatePreAuthKeyResponse:
+            type: object
+            properties:
+                preAuthKey:
+                    $ref: '#/components/schemas/headscale.v1.PreAuthKey'
+        headscale.v1.CreateUserRequest:
+            type: object
+            properties:
+                name:
+                    type: string
+                displayName:
+                    type: string
+                email:
+                    type: string
+                pictureUrl:
+                    type: string
+        headscale.v1.CreateUserResponse:
+            type: object
+            properties:
+                user:
+                    $ref: '#/components/schemas/headscale.v1.User'
+        headscale.v1.DebugCreateNodeRequest:
+            type: object
+            properties:
+                user:
+                    type: string
+                key:
+                    type: string
+                name:
+                    type: string
+                routes:
+                    type: array
+                    items:
+                        type: string
+        headscale.v1.DebugCreateNodeResponse:
+            type: object
+            properties:
+                node:
+                    $ref: '#/components/schemas/headscale.v1.Node'
+        headscale.v1.DeleteApiKeyResponse:
+            type: object
+            properties: {}
+        headscale.v1.DeleteNodeResponse:
+            type: object
+            properties: {}
+        headscale.v1.DeletePreAuthKeyResponse:
+            type: object
+            properties: {}
+        headscale.v1.DeleteUserResponse:
+            type: object
+            properties: {}
+        headscale.v1.ExpireApiKeyRequest:
+            type: object
+            properties:
+                prefix:
+                    type: string
+                id:
+                    type: string
+        headscale.v1.ExpireApiKeyResponse:
+            type: object
+            properties: {}
+        headscale.v1.ExpireNodeResponse:
+            type: object
+            properties:
+                node:
+                    $ref: '#/components/schemas/headscale.v1.Node'
+        headscale.v1.ExpirePreAuthKeyRequest:
+            type: object
+            properties:
+                id:
+                    type: string
+        headscale.v1.ExpirePreAuthKeyResponse:
+            type: object
+            properties: {}
+        headscale.v1.GetNodeResponse:
+            type: object
+            properties:
+                node:
+                    $ref: '#/components/schemas/headscale.v1.Node'
+        headscale.v1.GetPolicyResponse:
+            type: object
+            properties:
+                policy:
+                    type: string
+                updatedAt:
+                    type: string
+                    format: date-time
+        headscale.v1.HealthResponse:
+            type: object
+            properties:
+                databaseConnectivity:
+                    type: boolean
+        headscale.v1.ListApiKeysResponse:
+            type: object
+            properties:
+                apiKeys:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/headscale.v1.ApiKey'
+        headscale.v1.ListNodesResponse:
+            type: object
+            properties:
+                nodes:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/headscale.v1.Node'
+        headscale.v1.ListPreAuthKeysResponse:
+            type: object
+            properties:
+                preAuthKeys:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/headscale.v1.PreAuthKey'
+        headscale.v1.ListUsersResponse:
+            type: object
+            properties:
+                users:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/headscale.v1.User'
+        headscale.v1.Node:
+            type: object
+            properties:
+                id:
+                    type: string
+                machineKey:
+                    type: string
+                nodeKey:
+                    type: string
+                discoKey:
+                    type: string
+                ipAddresses:
+                    type: array
+                    items:
+                        type: string
+                name:
+                    type: string
+                user:
+                    $ref: '#/components/schemas/headscale.v1.User'
+                lastSeen:
+                    type: string
+                    format: date-time
+                expiry:
+                    type: string
+                    format: date-time
+                preAuthKey:
+                    $ref: '#/components/schemas/headscale.v1.PreAuthKey'
+                createdAt:
+                    type: string
+                    format: date-time
+                registerMethod:
+                    type: integer
+                    format: enum
+                givenName:
+                    type: string
+                    description: |-
+                        Deprecated
+                         repeated string forced_tags = 18;
+                         repeated string invalid_tags = 19;
+                         repeated string valid_tags = 20;
+                online:
+                    type: boolean
+                approvedRoutes:
+                    type: array
+                    items:
+                        type: string
+                availableRoutes:
+                    type: array
+                    items:
+                        type: string
+                subnetRoutes:
+                    type: array
+                    items:
+                        type: string
+                tags:
+                    type: array
+                    items:
+                        type: string
+        headscale.v1.PreAuthKey:
+            type: object
+            properties:
+                user:
+                    $ref: '#/components/schemas/headscale.v1.User'
+                id:
+                    type: string
+                key:
+                    type: string
+                reusable:
+                    type: boolean
+                ephemeral:
+                    type: boolean
+                used:
+                    type: boolean
+                expiration:
+                    type: string
+                    format: date-time
+                createdAt:
+                    type: string
+                    format: date-time
+                aclTags:
+                    type: array
+                    items:
+                        type: string
+        headscale.v1.RegisterNodeResponse:
+            type: object
+            properties:
+                node:
+                    $ref: '#/components/schemas/headscale.v1.Node'
+        headscale.v1.RenameNodeResponse:
+            type: object
+            properties:
+                node:
+                    $ref: '#/components/schemas/headscale.v1.Node'
+        headscale.v1.RenameUserResponse:
+            type: object
+            properties:
+                user:
+                    $ref: '#/components/schemas/headscale.v1.User'
+        headscale.v1.SetApprovedRoutesRequest:
+            type: object
+            properties:
+                nodeId:
+                    type: string
+                routes:
+                    type: array
+                    items:
+                        type: string
+        headscale.v1.SetApprovedRoutesResponse:
+            type: object
+            properties:
+                node:
+                    $ref: '#/components/schemas/headscale.v1.Node'
+        headscale.v1.SetPolicyRequest:
+            type: object
+            properties:
+                policy:
+                    type: string
+        headscale.v1.SetPolicyResponse:
+            type: object
+            properties:
+                policy:
+                    type: string
+                updatedAt:
+                    type: string
+                    format: date-time
+        headscale.v1.SetTagsRequest:
+            type: object
+            properties:
+                nodeId:
+                    type: string
+                tags:
+                    type: array
+                    items:
+                        type: string
+        headscale.v1.SetTagsResponse:
+            type: object
+            properties:
+                node:
+                    $ref: '#/components/schemas/headscale.v1.Node'
+        headscale.v1.User:
+            type: object
+            properties:
+                id:
+                    type: string
+                name:
+                    type: string
+                createdAt:
+                    type: string
+                    format: date-time
+                displayName:
+                    type: string
+                email:
+                    type: string
+                providerId:
+                    type: string
+                provider:
+                    type: string
+                profilePicUrl:
+                    type: string
+        helloworld.v1.HelloReply:
+            type: object
+            properties:
+                message:
+                    type: string
+            description: The response message containing the greetings
+tags:
+    - name: Greeter
+      description: The greeting service definition.
+    - name: HeadscaleService
