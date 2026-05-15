@@ -259,6 +259,7 @@ func getGRPCContext() (context.Context, *grpc.ClientConn, error) {
 
 	go func() {
 		<-ctx.Done()
+		cancel()
 		conn.Close()
 	}()
 

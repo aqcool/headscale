@@ -26,6 +26,7 @@ type Bootstrap struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Server        *Server                `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
 	Data          *Data                  `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	Headscale     *Headscale             `protobuf:"bytes,3,opt,name=headscale,proto3" json:"headscale,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -70,6 +71,13 @@ func (x *Bootstrap) GetServer() *Server {
 func (x *Bootstrap) GetData() *Data {
 	if x != nil {
 		return x.Data
+	}
+	return nil
+}
+
+func (x *Bootstrap) GetHeadscale() *Headscale {
+	if x != nil {
+		return x.Headscale
 	}
 	return nil
 }
@@ -178,6 +186,1306 @@ func (x *Data) GetRedis() *Data_Redis {
 	return nil
 }
 
+type Headscale struct {
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	ServerUrl            string                 `protobuf:"bytes,1,opt,name=server_url,json=serverUrl,proto3" json:"server_url,omitempty"`
+	ListenAddr           string                 `protobuf:"bytes,2,opt,name=listen_addr,json=listenAddr,proto3" json:"listen_addr,omitempty"`
+	MetricsAddr          string                 `protobuf:"bytes,3,opt,name=metrics_addr,json=metricsAddr,proto3" json:"metrics_addr,omitempty"`
+	GrpcAddr             string                 `protobuf:"bytes,4,opt,name=grpc_addr,json=grpcAddr,proto3" json:"grpc_addr,omitempty"`
+	GrpcAllowInsecure    bool                   `protobuf:"varint,5,opt,name=grpc_allow_insecure,json=grpcAllowInsecure,proto3" json:"grpc_allow_insecure,omitempty"`
+	BaseDomain           string                 `protobuf:"bytes,6,opt,name=base_domain,json=baseDomain,proto3" json:"base_domain,omitempty"`
+	NoisePrivateKeyPath  string                 `protobuf:"bytes,7,opt,name=noise_private_key_path,json=noisePrivateKeyPath,proto3" json:"noise_private_key_path,omitempty"`
+	DisableUpdateCheck   bool                   `protobuf:"varint,8,opt,name=disable_update_check,json=disableUpdateCheck,proto3" json:"disable_update_check,omitempty"`
+	UnixSocket           string                 `protobuf:"bytes,9,opt,name=unix_socket,json=unixSocket,proto3" json:"unix_socket,omitempty"`
+	UnixSocketPermission string                 `protobuf:"bytes,10,opt,name=unix_socket_permission,json=unixSocketPermission,proto3" json:"unix_socket_permission,omitempty"`
+	RandomizeClientPort  bool                   `protobuf:"varint,11,opt,name=randomize_client_port,json=randomizeClientPort,proto3" json:"randomize_client_port,omitempty"`
+	AcmeUrl              string                 `protobuf:"bytes,12,opt,name=acme_url,json=acmeUrl,proto3" json:"acme_url,omitempty"`
+	AcmeEmail            string                 `protobuf:"bytes,13,opt,name=acme_email,json=acmeEmail,proto3" json:"acme_email,omitempty"`
+	Prefixes             *Prefixes              `protobuf:"bytes,20,opt,name=prefixes,proto3" json:"prefixes,omitempty"`
+	Derp                 *DERP                  `protobuf:"bytes,21,opt,name=derp,proto3" json:"derp,omitempty"`
+	Dns                  *DNS                   `protobuf:"bytes,22,opt,name=dns,proto3" json:"dns,omitempty"`
+	Tls                  *TLS                   `protobuf:"bytes,23,opt,name=tls,proto3" json:"tls,omitempty"`
+	Oidc                 *OIDC                  `protobuf:"bytes,24,opt,name=oidc,proto3" json:"oidc,omitempty"`
+	Log                  *Log                   `protobuf:"bytes,25,opt,name=log,proto3" json:"log,omitempty"`
+	Node                 *Node                  `protobuf:"bytes,26,opt,name=node,proto3" json:"node,omitempty"`
+	Policy               *Policy                `protobuf:"bytes,27,opt,name=policy,proto3" json:"policy,omitempty"`
+	Cli                  *CLI                   `protobuf:"bytes,28,opt,name=cli,proto3" json:"cli,omitempty"`
+	Tuning               *Tuning                `protobuf:"bytes,29,opt,name=tuning,proto3" json:"tuning,omitempty"`
+	Taildrop             *Taildrop              `protobuf:"bytes,30,opt,name=taildrop,proto3" json:"taildrop,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *Headscale) Reset() {
+	*x = Headscale{}
+	mi := &file_conf_conf_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Headscale) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Headscale) ProtoMessage() {}
+
+func (x *Headscale) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Headscale.ProtoReflect.Descriptor instead.
+func (*Headscale) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *Headscale) GetServerUrl() string {
+	if x != nil {
+		return x.ServerUrl
+	}
+	return ""
+}
+
+func (x *Headscale) GetListenAddr() string {
+	if x != nil {
+		return x.ListenAddr
+	}
+	return ""
+}
+
+func (x *Headscale) GetMetricsAddr() string {
+	if x != nil {
+		return x.MetricsAddr
+	}
+	return ""
+}
+
+func (x *Headscale) GetGrpcAddr() string {
+	if x != nil {
+		return x.GrpcAddr
+	}
+	return ""
+}
+
+func (x *Headscale) GetGrpcAllowInsecure() bool {
+	if x != nil {
+		return x.GrpcAllowInsecure
+	}
+	return false
+}
+
+func (x *Headscale) GetBaseDomain() string {
+	if x != nil {
+		return x.BaseDomain
+	}
+	return ""
+}
+
+func (x *Headscale) GetNoisePrivateKeyPath() string {
+	if x != nil {
+		return x.NoisePrivateKeyPath
+	}
+	return ""
+}
+
+func (x *Headscale) GetDisableUpdateCheck() bool {
+	if x != nil {
+		return x.DisableUpdateCheck
+	}
+	return false
+}
+
+func (x *Headscale) GetUnixSocket() string {
+	if x != nil {
+		return x.UnixSocket
+	}
+	return ""
+}
+
+func (x *Headscale) GetUnixSocketPermission() string {
+	if x != nil {
+		return x.UnixSocketPermission
+	}
+	return ""
+}
+
+func (x *Headscale) GetRandomizeClientPort() bool {
+	if x != nil {
+		return x.RandomizeClientPort
+	}
+	return false
+}
+
+func (x *Headscale) GetAcmeUrl() string {
+	if x != nil {
+		return x.AcmeUrl
+	}
+	return ""
+}
+
+func (x *Headscale) GetAcmeEmail() string {
+	if x != nil {
+		return x.AcmeEmail
+	}
+	return ""
+}
+
+func (x *Headscale) GetPrefixes() *Prefixes {
+	if x != nil {
+		return x.Prefixes
+	}
+	return nil
+}
+
+func (x *Headscale) GetDerp() *DERP {
+	if x != nil {
+		return x.Derp
+	}
+	return nil
+}
+
+func (x *Headscale) GetDns() *DNS {
+	if x != nil {
+		return x.Dns
+	}
+	return nil
+}
+
+func (x *Headscale) GetTls() *TLS {
+	if x != nil {
+		return x.Tls
+	}
+	return nil
+}
+
+func (x *Headscale) GetOidc() *OIDC {
+	if x != nil {
+		return x.Oidc
+	}
+	return nil
+}
+
+func (x *Headscale) GetLog() *Log {
+	if x != nil {
+		return x.Log
+	}
+	return nil
+}
+
+func (x *Headscale) GetNode() *Node {
+	if x != nil {
+		return x.Node
+	}
+	return nil
+}
+
+func (x *Headscale) GetPolicy() *Policy {
+	if x != nil {
+		return x.Policy
+	}
+	return nil
+}
+
+func (x *Headscale) GetCli() *CLI {
+	if x != nil {
+		return x.Cli
+	}
+	return nil
+}
+
+func (x *Headscale) GetTuning() *Tuning {
+	if x != nil {
+		return x.Tuning
+	}
+	return nil
+}
+
+func (x *Headscale) GetTaildrop() *Taildrop {
+	if x != nil {
+		return x.Taildrop
+	}
+	return nil
+}
+
+type Prefixes struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	V4            string                 `protobuf:"bytes,1,opt,name=v4,proto3" json:"v4,omitempty"`
+	V6            string                 `protobuf:"bytes,2,opt,name=v6,proto3" json:"v6,omitempty"`
+	Allocation    string                 `protobuf:"bytes,3,opt,name=allocation,proto3" json:"allocation,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Prefixes) Reset() {
+	*x = Prefixes{}
+	mi := &file_conf_conf_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Prefixes) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Prefixes) ProtoMessage() {}
+
+func (x *Prefixes) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Prefixes.ProtoReflect.Descriptor instead.
+func (*Prefixes) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *Prefixes) GetV4() string {
+	if x != nil {
+		return x.V4
+	}
+	return ""
+}
+
+func (x *Prefixes) GetV6() string {
+	if x != nil {
+		return x.V6
+	}
+	return ""
+}
+
+func (x *Prefixes) GetAllocation() string {
+	if x != nil {
+		return x.Allocation
+	}
+	return ""
+}
+
+type DERP struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	Server            *DERP_Server           `protobuf:"bytes,1,opt,name=server,proto3" json:"server,omitempty"`
+	Urls              []string               `protobuf:"bytes,2,rep,name=urls,proto3" json:"urls,omitempty"`
+	Paths             []string               `protobuf:"bytes,3,rep,name=paths,proto3" json:"paths,omitempty"`
+	AutoUpdateEnabled bool                   `protobuf:"varint,4,opt,name=auto_update_enabled,json=autoUpdateEnabled,proto3" json:"auto_update_enabled,omitempty"`
+	UpdateFrequency   *durationpb.Duration   `protobuf:"bytes,5,opt,name=update_frequency,json=updateFrequency,proto3" json:"update_frequency,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *DERP) Reset() {
+	*x = DERP{}
+	mi := &file_conf_conf_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DERP) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DERP) ProtoMessage() {}
+
+func (x *DERP) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DERP.ProtoReflect.Descriptor instead.
+func (*DERP) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *DERP) GetServer() *DERP_Server {
+	if x != nil {
+		return x.Server
+	}
+	return nil
+}
+
+func (x *DERP) GetUrls() []string {
+	if x != nil {
+		return x.Urls
+	}
+	return nil
+}
+
+func (x *DERP) GetPaths() []string {
+	if x != nil {
+		return x.Paths
+	}
+	return nil
+}
+
+func (x *DERP) GetAutoUpdateEnabled() bool {
+	if x != nil {
+		return x.AutoUpdateEnabled
+	}
+	return false
+}
+
+func (x *DERP) GetUpdateFrequency() *durationpb.Duration {
+	if x != nil {
+		return x.UpdateFrequency
+	}
+	return nil
+}
+
+type DNS struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	MagicDns          bool                   `protobuf:"varint,1,opt,name=magic_dns,json=magicDns,proto3" json:"magic_dns,omitempty"`
+	BaseDomain        string                 `protobuf:"bytes,2,opt,name=base_domain,json=baseDomain,proto3" json:"base_domain,omitempty"`
+	OverrideLocalDns  bool                   `protobuf:"varint,3,opt,name=override_local_dns,json=overrideLocalDns,proto3" json:"override_local_dns,omitempty"`
+	GlobalNameservers []string               `protobuf:"bytes,4,rep,name=global_nameservers,json=globalNameservers,proto3" json:"global_nameservers,omitempty"`
+	SplitNameservers  map[string]*StringList `protobuf:"bytes,5,rep,name=split_nameservers,json=splitNameservers,proto3" json:"split_nameservers,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	SearchDomains     []string               `protobuf:"bytes,6,rep,name=search_domains,json=searchDomains,proto3" json:"search_domains,omitempty"`
+	ExtraRecordsPath  string                 `protobuf:"bytes,7,opt,name=extra_records_path,json=extraRecordsPath,proto3" json:"extra_records_path,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *DNS) Reset() {
+	*x = DNS{}
+	mi := &file_conf_conf_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DNS) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DNS) ProtoMessage() {}
+
+func (x *DNS) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DNS.ProtoReflect.Descriptor instead.
+func (*DNS) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *DNS) GetMagicDns() bool {
+	if x != nil {
+		return x.MagicDns
+	}
+	return false
+}
+
+func (x *DNS) GetBaseDomain() string {
+	if x != nil {
+		return x.BaseDomain
+	}
+	return ""
+}
+
+func (x *DNS) GetOverrideLocalDns() bool {
+	if x != nil {
+		return x.OverrideLocalDns
+	}
+	return false
+}
+
+func (x *DNS) GetGlobalNameservers() []string {
+	if x != nil {
+		return x.GlobalNameservers
+	}
+	return nil
+}
+
+func (x *DNS) GetSplitNameservers() map[string]*StringList {
+	if x != nil {
+		return x.SplitNameservers
+	}
+	return nil
+}
+
+func (x *DNS) GetSearchDomains() []string {
+	if x != nil {
+		return x.SearchDomains
+	}
+	return nil
+}
+
+func (x *DNS) GetExtraRecordsPath() string {
+	if x != nil {
+		return x.ExtraRecordsPath
+	}
+	return ""
+}
+
+type StringList struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Values        []string               `protobuf:"bytes,1,rep,name=values,proto3" json:"values,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StringList) Reset() {
+	*x = StringList{}
+	mi := &file_conf_conf_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StringList) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StringList) ProtoMessage() {}
+
+func (x *StringList) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StringList.ProtoReflect.Descriptor instead.
+func (*StringList) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *StringList) GetValues() []string {
+	if x != nil {
+		return x.Values
+	}
+	return nil
+}
+
+type TLS struct {
+	state                    protoimpl.MessageState `protogen:"open.v1"`
+	CertPath                 string                 `protobuf:"bytes,1,opt,name=cert_path,json=certPath,proto3" json:"cert_path,omitempty"`
+	KeyPath                  string                 `protobuf:"bytes,2,opt,name=key_path,json=keyPath,proto3" json:"key_path,omitempty"`
+	LetsencryptListen        string                 `protobuf:"bytes,3,opt,name=letsencrypt_listen,json=letsencryptListen,proto3" json:"letsencrypt_listen,omitempty"`
+	LetsencryptHostname      string                 `protobuf:"bytes,4,opt,name=letsencrypt_hostname,json=letsencryptHostname,proto3" json:"letsencrypt_hostname,omitempty"`
+	LetsencryptCacheDir      string                 `protobuf:"bytes,5,opt,name=letsencrypt_cache_dir,json=letsencryptCacheDir,proto3" json:"letsencrypt_cache_dir,omitempty"`
+	LetsencryptChallengeType string                 `protobuf:"bytes,6,opt,name=letsencrypt_challenge_type,json=letsencryptChallengeType,proto3" json:"letsencrypt_challenge_type,omitempty"`
+	unknownFields            protoimpl.UnknownFields
+	sizeCache                protoimpl.SizeCache
+}
+
+func (x *TLS) Reset() {
+	*x = TLS{}
+	mi := &file_conf_conf_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TLS) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TLS) ProtoMessage() {}
+
+func (x *TLS) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TLS.ProtoReflect.Descriptor instead.
+func (*TLS) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *TLS) GetCertPath() string {
+	if x != nil {
+		return x.CertPath
+	}
+	return ""
+}
+
+func (x *TLS) GetKeyPath() string {
+	if x != nil {
+		return x.KeyPath
+	}
+	return ""
+}
+
+func (x *TLS) GetLetsencryptListen() string {
+	if x != nil {
+		return x.LetsencryptListen
+	}
+	return ""
+}
+
+func (x *TLS) GetLetsencryptHostname() string {
+	if x != nil {
+		return x.LetsencryptHostname
+	}
+	return ""
+}
+
+func (x *TLS) GetLetsencryptCacheDir() string {
+	if x != nil {
+		return x.LetsencryptCacheDir
+	}
+	return ""
+}
+
+func (x *TLS) GetLetsencryptChallengeType() string {
+	if x != nil {
+		return x.LetsencryptChallengeType
+	}
+	return ""
+}
+
+type OIDC struct {
+	state                      protoimpl.MessageState `protogen:"open.v1"`
+	Enabled                    bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	OnlyStartIfOidcIsAvailable bool                   `protobuf:"varint,2,opt,name=only_start_if_oidc_is_available,json=onlyStartIfOidcIsAvailable,proto3" json:"only_start_if_oidc_is_available,omitempty"`
+	Issuer                     string                 `protobuf:"bytes,3,opt,name=issuer,proto3" json:"issuer,omitempty"`
+	ClientId                   string                 `protobuf:"bytes,4,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
+	ClientSecret               string                 `protobuf:"bytes,5,opt,name=client_secret,json=clientSecret,proto3" json:"client_secret,omitempty"`
+	ClientSecretPath           string                 `protobuf:"bytes,6,opt,name=client_secret_path,json=clientSecretPath,proto3" json:"client_secret_path,omitempty"`
+	Scope                      []string               `protobuf:"bytes,7,rep,name=scope,proto3" json:"scope,omitempty"`
+	ExtraParams                map[string]string      `protobuf:"bytes,8,rep,name=extra_params,json=extraParams,proto3" json:"extra_params,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	AllowedDomains             []string               `protobuf:"bytes,9,rep,name=allowed_domains,json=allowedDomains,proto3" json:"allowed_domains,omitempty"`
+	AllowedUsers               []string               `protobuf:"bytes,10,rep,name=allowed_users,json=allowedUsers,proto3" json:"allowed_users,omitempty"`
+	AllowedGroups              []string               `protobuf:"bytes,11,rep,name=allowed_groups,json=allowedGroups,proto3" json:"allowed_groups,omitempty"`
+	EmailVerifiedRequired      bool                   `protobuf:"varint,12,opt,name=email_verified_required,json=emailVerifiedRequired,proto3" json:"email_verified_required,omitempty"`
+	UseExpiryFromToken         bool                   `protobuf:"varint,13,opt,name=use_expiry_from_token,json=useExpiryFromToken,proto3" json:"use_expiry_from_token,omitempty"`
+	Pkce                       *PKCE                  `protobuf:"bytes,14,opt,name=pkce,proto3" json:"pkce,omitempty"`
+	unknownFields              protoimpl.UnknownFields
+	sizeCache                  protoimpl.SizeCache
+}
+
+func (x *OIDC) Reset() {
+	*x = OIDC{}
+	mi := &file_conf_conf_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OIDC) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OIDC) ProtoMessage() {}
+
+func (x *OIDC) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OIDC.ProtoReflect.Descriptor instead.
+func (*OIDC) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *OIDC) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *OIDC) GetOnlyStartIfOidcIsAvailable() bool {
+	if x != nil {
+		return x.OnlyStartIfOidcIsAvailable
+	}
+	return false
+}
+
+func (x *OIDC) GetIssuer() string {
+	if x != nil {
+		return x.Issuer
+	}
+	return ""
+}
+
+func (x *OIDC) GetClientId() string {
+	if x != nil {
+		return x.ClientId
+	}
+	return ""
+}
+
+func (x *OIDC) GetClientSecret() string {
+	if x != nil {
+		return x.ClientSecret
+	}
+	return ""
+}
+
+func (x *OIDC) GetClientSecretPath() string {
+	if x != nil {
+		return x.ClientSecretPath
+	}
+	return ""
+}
+
+func (x *OIDC) GetScope() []string {
+	if x != nil {
+		return x.Scope
+	}
+	return nil
+}
+
+func (x *OIDC) GetExtraParams() map[string]string {
+	if x != nil {
+		return x.ExtraParams
+	}
+	return nil
+}
+
+func (x *OIDC) GetAllowedDomains() []string {
+	if x != nil {
+		return x.AllowedDomains
+	}
+	return nil
+}
+
+func (x *OIDC) GetAllowedUsers() []string {
+	if x != nil {
+		return x.AllowedUsers
+	}
+	return nil
+}
+
+func (x *OIDC) GetAllowedGroups() []string {
+	if x != nil {
+		return x.AllowedGroups
+	}
+	return nil
+}
+
+func (x *OIDC) GetEmailVerifiedRequired() bool {
+	if x != nil {
+		return x.EmailVerifiedRequired
+	}
+	return false
+}
+
+func (x *OIDC) GetUseExpiryFromToken() bool {
+	if x != nil {
+		return x.UseExpiryFromToken
+	}
+	return false
+}
+
+func (x *OIDC) GetPkce() *PKCE {
+	if x != nil {
+		return x.Pkce
+	}
+	return nil
+}
+
+type PKCE struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	Method        string                 `protobuf:"bytes,2,opt,name=method,proto3" json:"method,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PKCE) Reset() {
+	*x = PKCE{}
+	mi := &file_conf_conf_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PKCE) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PKCE) ProtoMessage() {}
+
+func (x *PKCE) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PKCE.ProtoReflect.Descriptor instead.
+func (*PKCE) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *PKCE) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *PKCE) GetMethod() string {
+	if x != nil {
+		return x.Method
+	}
+	return ""
+}
+
+type Log struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Level         string                 `protobuf:"bytes,1,opt,name=level,proto3" json:"level,omitempty"`
+	Format        string                 `protobuf:"bytes,2,opt,name=format,proto3" json:"format,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Log) Reset() {
+	*x = Log{}
+	mi := &file_conf_conf_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Log) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Log) ProtoMessage() {}
+
+func (x *Log) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Log.ProtoReflect.Descriptor instead.
+func (*Log) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *Log) GetLevel() string {
+	if x != nil {
+		return x.Level
+	}
+	return ""
+}
+
+func (x *Log) GetFormat() string {
+	if x != nil {
+		return x.Format
+	}
+	return ""
+}
+
+type Node struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Expiry        *durationpb.Duration   `protobuf:"bytes,1,opt,name=expiry,proto3" json:"expiry,omitempty"`
+	Ephemeral     *Ephemeral             `protobuf:"bytes,2,opt,name=ephemeral,proto3" json:"ephemeral,omitempty"`
+	Routes        *Routes                `protobuf:"bytes,3,opt,name=routes,proto3" json:"routes,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Node) Reset() {
+	*x = Node{}
+	mi := &file_conf_conf_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Node) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Node) ProtoMessage() {}
+
+func (x *Node) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Node.ProtoReflect.Descriptor instead.
+func (*Node) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *Node) GetExpiry() *durationpb.Duration {
+	if x != nil {
+		return x.Expiry
+	}
+	return nil
+}
+
+func (x *Node) GetEphemeral() *Ephemeral {
+	if x != nil {
+		return x.Ephemeral
+	}
+	return nil
+}
+
+func (x *Node) GetRoutes() *Routes {
+	if x != nil {
+		return x.Routes
+	}
+	return nil
+}
+
+type Ephemeral struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	InactivityTimeout *durationpb.Duration   `protobuf:"bytes,1,opt,name=inactivity_timeout,json=inactivityTimeout,proto3" json:"inactivity_timeout,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *Ephemeral) Reset() {
+	*x = Ephemeral{}
+	mi := &file_conf_conf_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Ephemeral) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Ephemeral) ProtoMessage() {}
+
+func (x *Ephemeral) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Ephemeral.ProtoReflect.Descriptor instead.
+func (*Ephemeral) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *Ephemeral) GetInactivityTimeout() *durationpb.Duration {
+	if x != nil {
+		return x.InactivityTimeout
+	}
+	return nil
+}
+
+type Routes struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Ha            *HA                    `protobuf:"bytes,1,opt,name=ha,proto3" json:"ha,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Routes) Reset() {
+	*x = Routes{}
+	mi := &file_conf_conf_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Routes) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Routes) ProtoMessage() {}
+
+func (x *Routes) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Routes.ProtoReflect.Descriptor instead.
+func (*Routes) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *Routes) GetHa() *HA {
+	if x != nil {
+		return x.Ha
+	}
+	return nil
+}
+
+type HA struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ProbeInterval *durationpb.Duration   `protobuf:"bytes,1,opt,name=probe_interval,json=probeInterval,proto3" json:"probe_interval,omitempty"`
+	ProbeTimeout  *durationpb.Duration   `protobuf:"bytes,2,opt,name=probe_timeout,json=probeTimeout,proto3" json:"probe_timeout,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HA) Reset() {
+	*x = HA{}
+	mi := &file_conf_conf_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HA) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HA) ProtoMessage() {}
+
+func (x *HA) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HA.ProtoReflect.Descriptor instead.
+func (*HA) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *HA) GetProbeInterval() *durationpb.Duration {
+	if x != nil {
+		return x.ProbeInterval
+	}
+	return nil
+}
+
+func (x *HA) GetProbeTimeout() *durationpb.Duration {
+	if x != nil {
+		return x.ProbeTimeout
+	}
+	return nil
+}
+
+type Policy struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Mode          string                 `protobuf:"bytes,1,opt,name=mode,proto3" json:"mode,omitempty"`
+	Path          string                 `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Policy) Reset() {
+	*x = Policy{}
+	mi := &file_conf_conf_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Policy) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Policy) ProtoMessage() {}
+
+func (x *Policy) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Policy.ProtoReflect.Descriptor instead.
+func (*Policy) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *Policy) GetMode() string {
+	if x != nil {
+		return x.Mode
+	}
+	return ""
+}
+
+func (x *Policy) GetPath() string {
+	if x != nil {
+		return x.Path
+	}
+	return ""
+}
+
+type CLI struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Address       string                 `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
+	ApiKey        string                 `protobuf:"bytes,2,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
+	Timeout       *durationpb.Duration   `protobuf:"bytes,3,opt,name=timeout,proto3" json:"timeout,omitempty"`
+	Insecure      bool                   `protobuf:"varint,4,opt,name=insecure,proto3" json:"insecure,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CLI) Reset() {
+	*x = CLI{}
+	mi := &file_conf_conf_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CLI) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CLI) ProtoMessage() {}
+
+func (x *CLI) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CLI.ProtoReflect.Descriptor instead.
+func (*CLI) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *CLI) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
+func (x *CLI) GetApiKey() string {
+	if x != nil {
+		return x.ApiKey
+	}
+	return ""
+}
+
+func (x *CLI) GetTimeout() *durationpb.Duration {
+	if x != nil {
+		return x.Timeout
+	}
+	return nil
+}
+
+func (x *CLI) GetInsecure() bool {
+	if x != nil {
+		return x.Insecure
+	}
+	return false
+}
+
+type Tuning struct {
+	state                          protoimpl.MessageState `protogen:"open.v1"`
+	NotifierSendTimeout            *durationpb.Duration   `protobuf:"bytes,1,opt,name=notifier_send_timeout,json=notifierSendTimeout,proto3" json:"notifier_send_timeout,omitempty"`
+	BatchChangeDelay               *durationpb.Duration   `protobuf:"bytes,2,opt,name=batch_change_delay,json=batchChangeDelay,proto3" json:"batch_change_delay,omitempty"`
+	NodeMapsessionBufferedChanSize int32                  `protobuf:"varint,3,opt,name=node_mapsession_buffered_chan_size,json=nodeMapsessionBufferedChanSize,proto3" json:"node_mapsession_buffered_chan_size,omitempty"`
+	BatcherWorkers                 int32                  `protobuf:"varint,4,opt,name=batcher_workers,json=batcherWorkers,proto3" json:"batcher_workers,omitempty"`
+	RegisterCacheExpiration        *durationpb.Duration   `protobuf:"bytes,5,opt,name=register_cache_expiration,json=registerCacheExpiration,proto3" json:"register_cache_expiration,omitempty"`
+	RegisterCacheMaxEntries        int32                  `protobuf:"varint,6,opt,name=register_cache_max_entries,json=registerCacheMaxEntries,proto3" json:"register_cache_max_entries,omitempty"`
+	NodeStoreBatchSize             int32                  `protobuf:"varint,7,opt,name=node_store_batch_size,json=nodeStoreBatchSize,proto3" json:"node_store_batch_size,omitempty"`
+	NodeStoreBatchTimeout          *durationpb.Duration   `protobuf:"bytes,8,opt,name=node_store_batch_timeout,json=nodeStoreBatchTimeout,proto3" json:"node_store_batch_timeout,omitempty"`
+	unknownFields                  protoimpl.UnknownFields
+	sizeCache                      protoimpl.SizeCache
+}
+
+func (x *Tuning) Reset() {
+	*x = Tuning{}
+	mi := &file_conf_conf_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Tuning) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Tuning) ProtoMessage() {}
+
+func (x *Tuning) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Tuning.ProtoReflect.Descriptor instead.
+func (*Tuning) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *Tuning) GetNotifierSendTimeout() *durationpb.Duration {
+	if x != nil {
+		return x.NotifierSendTimeout
+	}
+	return nil
+}
+
+func (x *Tuning) GetBatchChangeDelay() *durationpb.Duration {
+	if x != nil {
+		return x.BatchChangeDelay
+	}
+	return nil
+}
+
+func (x *Tuning) GetNodeMapsessionBufferedChanSize() int32 {
+	if x != nil {
+		return x.NodeMapsessionBufferedChanSize
+	}
+	return 0
+}
+
+func (x *Tuning) GetBatcherWorkers() int32 {
+	if x != nil {
+		return x.BatcherWorkers
+	}
+	return 0
+}
+
+func (x *Tuning) GetRegisterCacheExpiration() *durationpb.Duration {
+	if x != nil {
+		return x.RegisterCacheExpiration
+	}
+	return nil
+}
+
+func (x *Tuning) GetRegisterCacheMaxEntries() int32 {
+	if x != nil {
+		return x.RegisterCacheMaxEntries
+	}
+	return 0
+}
+
+func (x *Tuning) GetNodeStoreBatchSize() int32 {
+	if x != nil {
+		return x.NodeStoreBatchSize
+	}
+	return 0
+}
+
+func (x *Tuning) GetNodeStoreBatchTimeout() *durationpb.Duration {
+	if x != nil {
+		return x.NodeStoreBatchTimeout
+	}
+	return nil
+}
+
+type Taildrop struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Taildrop) Reset() {
+	*x = Taildrop{}
+	mi := &file_conf_conf_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Taildrop) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Taildrop) ProtoMessage() {}
+
+func (x *Taildrop) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Taildrop.ProtoReflect.Descriptor instead.
+func (*Taildrop) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *Taildrop) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
 type Server_HTTP struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Network       string                 `protobuf:"bytes,1,opt,name=network,proto3" json:"network,omitempty"`
@@ -189,7 +1497,7 @@ type Server_HTTP struct {
 
 func (x *Server_HTTP) Reset() {
 	*x = Server_HTTP{}
-	mi := &file_conf_conf_proto_msgTypes[3]
+	mi := &file_conf_conf_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -201,7 +1509,7 @@ func (x *Server_HTTP) String() string {
 func (*Server_HTTP) ProtoMessage() {}
 
 func (x *Server_HTTP) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[3]
+	mi := &file_conf_conf_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -249,7 +1557,7 @@ type Server_GRPC struct {
 
 func (x *Server_GRPC) Reset() {
 	*x = Server_GRPC{}
-	mi := &file_conf_conf_proto_msgTypes[4]
+	mi := &file_conf_conf_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -261,7 +1569,7 @@ func (x *Server_GRPC) String() string {
 func (*Server_GRPC) ProtoMessage() {}
 
 func (x *Server_GRPC) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[4]
+	mi := &file_conf_conf_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -302,13 +1610,14 @@ type Data_Database struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Driver        string                 `protobuf:"bytes,1,opt,name=driver,proto3" json:"driver,omitempty"`
 	Source        string                 `protobuf:"bytes,2,opt,name=source,proto3" json:"source,omitempty"`
+	Debug         bool                   `protobuf:"varint,3,opt,name=debug,proto3" json:"debug,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Data_Database) Reset() {
 	*x = Data_Database{}
-	mi := &file_conf_conf_proto_msgTypes[5]
+	mi := &file_conf_conf_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -320,7 +1629,7 @@ func (x *Data_Database) String() string {
 func (*Data_Database) ProtoMessage() {}
 
 func (x *Data_Database) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[5]
+	mi := &file_conf_conf_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -350,6 +1659,13 @@ func (x *Data_Database) GetSource() string {
 	return ""
 }
 
+func (x *Data_Database) GetDebug() bool {
+	if x != nil {
+		return x.Debug
+	}
+	return false
+}
+
 type Data_Redis struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Network       string                 `protobuf:"bytes,1,opt,name=network,proto3" json:"network,omitempty"`
@@ -362,7 +1678,7 @@ type Data_Redis struct {
 
 func (x *Data_Redis) Reset() {
 	*x = Data_Redis{}
-	mi := &file_conf_conf_proto_msgTypes[6]
+	mi := &file_conf_conf_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -374,7 +1690,7 @@ func (x *Data_Redis) String() string {
 func (*Data_Redis) ProtoMessage() {}
 
 func (x *Data_Redis) ProtoReflect() protoreflect.Message {
-	mi := &file_conf_conf_proto_msgTypes[6]
+	mi := &file_conf_conf_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -418,15 +1734,132 @@ func (x *Data_Redis) GetWriteTimeout() *durationpb.Duration {
 	return nil
 }
 
+type DERP_Server struct {
+	state                              protoimpl.MessageState `protogen:"open.v1"`
+	Enabled                            bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	AutomaticallyAddEmbeddedDerpRegion bool                   `protobuf:"varint,2,opt,name=automatically_add_embedded_derp_region,json=automaticallyAddEmbeddedDerpRegion,proto3" json:"automatically_add_embedded_derp_region,omitempty"`
+	RegionId                           int32                  `protobuf:"varint,3,opt,name=region_id,json=regionId,proto3" json:"region_id,omitempty"`
+	RegionCode                         string                 `protobuf:"bytes,4,opt,name=region_code,json=regionCode,proto3" json:"region_code,omitempty"`
+	RegionName                         string                 `protobuf:"bytes,5,opt,name=region_name,json=regionName,proto3" json:"region_name,omitempty"`
+	PrivateKeyPath                     string                 `protobuf:"bytes,6,opt,name=private_key_path,json=privateKeyPath,proto3" json:"private_key_path,omitempty"`
+	VerifyClients                      bool                   `protobuf:"varint,7,opt,name=verify_clients,json=verifyClients,proto3" json:"verify_clients,omitempty"`
+	StunListenAddr                     string                 `protobuf:"bytes,8,opt,name=stun_listen_addr,json=stunListenAddr,proto3" json:"stun_listen_addr,omitempty"`
+	Ipv4                               string                 `protobuf:"bytes,9,opt,name=ipv4,proto3" json:"ipv4,omitempty"`
+	Ipv6                               string                 `protobuf:"bytes,10,opt,name=ipv6,proto3" json:"ipv6,omitempty"`
+	unknownFields                      protoimpl.UnknownFields
+	sizeCache                          protoimpl.SizeCache
+}
+
+func (x *DERP_Server) Reset() {
+	*x = DERP_Server{}
+	mi := &file_conf_conf_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DERP_Server) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DERP_Server) ProtoMessage() {}
+
+func (x *DERP_Server) ProtoReflect() protoreflect.Message {
+	mi := &file_conf_conf_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DERP_Server.ProtoReflect.Descriptor instead.
+func (*DERP_Server) Descriptor() ([]byte, []int) {
+	return file_conf_conf_proto_rawDescGZIP(), []int{5, 0}
+}
+
+func (x *DERP_Server) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *DERP_Server) GetAutomaticallyAddEmbeddedDerpRegion() bool {
+	if x != nil {
+		return x.AutomaticallyAddEmbeddedDerpRegion
+	}
+	return false
+}
+
+func (x *DERP_Server) GetRegionId() int32 {
+	if x != nil {
+		return x.RegionId
+	}
+	return 0
+}
+
+func (x *DERP_Server) GetRegionCode() string {
+	if x != nil {
+		return x.RegionCode
+	}
+	return ""
+}
+
+func (x *DERP_Server) GetRegionName() string {
+	if x != nil {
+		return x.RegionName
+	}
+	return ""
+}
+
+func (x *DERP_Server) GetPrivateKeyPath() string {
+	if x != nil {
+		return x.PrivateKeyPath
+	}
+	return ""
+}
+
+func (x *DERP_Server) GetVerifyClients() bool {
+	if x != nil {
+		return x.VerifyClients
+	}
+	return false
+}
+
+func (x *DERP_Server) GetStunListenAddr() string {
+	if x != nil {
+		return x.StunListenAddr
+	}
+	return ""
+}
+
+func (x *DERP_Server) GetIpv4() string {
+	if x != nil {
+		return x.Ipv4
+	}
+	return ""
+}
+
+func (x *DERP_Server) GetIpv6() string {
+	if x != nil {
+		return x.Ipv6
+	}
+	return ""
+}
+
 var File_conf_conf_proto protoreflect.FileDescriptor
 
 const file_conf_conf_proto_rawDesc = "" +
 	"\n" +
 	"\x0fconf/conf.proto\x12\n" +
-	"kratos.api\x1a\x1egoogle/protobuf/duration.proto\"]\n" +
+	"kratos.api\x1a\x1egoogle/protobuf/duration.proto\"\x92\x01\n" +
 	"\tBootstrap\x12*\n" +
 	"\x06server\x18\x01 \x01(\v2\x12.kratos.api.ServerR\x06server\x12$\n" +
-	"\x04data\x18\x02 \x01(\v2\x10.kratos.api.DataR\x04data\"\xb8\x02\n" +
+	"\x04data\x18\x02 \x01(\v2\x10.kratos.api.DataR\x04data\x123\n" +
+	"\theadscale\x18\x03 \x01(\v2\x15.kratos.api.HeadscaleR\theadscale\"\xb8\x02\n" +
 	"\x06Server\x12+\n" +
 	"\x04http\x18\x01 \x01(\v2\x17.kratos.api.Server.HTTPR\x04http\x12+\n" +
 	"\x04grpc\x18\x02 \x01(\v2\x17.kratos.api.Server.GRPCR\x04grpc\x1ai\n" +
@@ -437,18 +1870,153 @@ const file_conf_conf_proto_rawDesc = "" +
 	"\x04GRPC\x12\x18\n" +
 	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x12\n" +
 	"\x04addr\x18\x02 \x01(\tR\x04addr\x123\n" +
-	"\atimeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"\xdd\x02\n" +
+	"\atimeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\atimeout\"\xf3\x02\n" +
 	"\x04Data\x125\n" +
 	"\bdatabase\x18\x01 \x01(\v2\x19.kratos.api.Data.DatabaseR\bdatabase\x12,\n" +
-	"\x05redis\x18\x02 \x01(\v2\x16.kratos.api.Data.RedisR\x05redis\x1a:\n" +
+	"\x05redis\x18\x02 \x01(\v2\x16.kratos.api.Data.RedisR\x05redis\x1aP\n" +
 	"\bDatabase\x12\x16\n" +
 	"\x06driver\x18\x01 \x01(\tR\x06driver\x12\x16\n" +
-	"\x06source\x18\x02 \x01(\tR\x06source\x1a\xb3\x01\n" +
+	"\x06source\x18\x02 \x01(\tR\x06source\x12\x14\n" +
+	"\x05debug\x18\x03 \x01(\bR\x05debug\x1a\xb3\x01\n" +
 	"\x05Redis\x12\x18\n" +
 	"\anetwork\x18\x01 \x01(\tR\anetwork\x12\x12\n" +
 	"\x04addr\x18\x02 \x01(\tR\x04addr\x12<\n" +
 	"\fread_timeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\vreadTimeout\x12>\n" +
-	"\rwrite_timeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\fwriteTimeoutB5Z3github.com/juanfont/headscale-v2/internal/conf;confb\x06proto3"
+	"\rwrite_timeout\x18\x04 \x01(\v2\x19.google.protobuf.DurationR\fwriteTimeout\"\xc2\a\n" +
+	"\tHeadscale\x12\x1d\n" +
+	"\n" +
+	"server_url\x18\x01 \x01(\tR\tserverUrl\x12\x1f\n" +
+	"\vlisten_addr\x18\x02 \x01(\tR\n" +
+	"listenAddr\x12!\n" +
+	"\fmetrics_addr\x18\x03 \x01(\tR\vmetricsAddr\x12\x1b\n" +
+	"\tgrpc_addr\x18\x04 \x01(\tR\bgrpcAddr\x12.\n" +
+	"\x13grpc_allow_insecure\x18\x05 \x01(\bR\x11grpcAllowInsecure\x12\x1f\n" +
+	"\vbase_domain\x18\x06 \x01(\tR\n" +
+	"baseDomain\x123\n" +
+	"\x16noise_private_key_path\x18\a \x01(\tR\x13noisePrivateKeyPath\x120\n" +
+	"\x14disable_update_check\x18\b \x01(\bR\x12disableUpdateCheck\x12\x1f\n" +
+	"\vunix_socket\x18\t \x01(\tR\n" +
+	"unixSocket\x124\n" +
+	"\x16unix_socket_permission\x18\n" +
+	" \x01(\tR\x14unixSocketPermission\x122\n" +
+	"\x15randomize_client_port\x18\v \x01(\bR\x13randomizeClientPort\x12\x19\n" +
+	"\bacme_url\x18\f \x01(\tR\aacmeUrl\x12\x1d\n" +
+	"\n" +
+	"acme_email\x18\r \x01(\tR\tacmeEmail\x120\n" +
+	"\bprefixes\x18\x14 \x01(\v2\x14.kratos.api.PrefixesR\bprefixes\x12$\n" +
+	"\x04derp\x18\x15 \x01(\v2\x10.kratos.api.DERPR\x04derp\x12!\n" +
+	"\x03dns\x18\x16 \x01(\v2\x0f.kratos.api.DNSR\x03dns\x12!\n" +
+	"\x03tls\x18\x17 \x01(\v2\x0f.kratos.api.TLSR\x03tls\x12$\n" +
+	"\x04oidc\x18\x18 \x01(\v2\x10.kratos.api.OIDCR\x04oidc\x12!\n" +
+	"\x03log\x18\x19 \x01(\v2\x0f.kratos.api.LogR\x03log\x12$\n" +
+	"\x04node\x18\x1a \x01(\v2\x10.kratos.api.NodeR\x04node\x12*\n" +
+	"\x06policy\x18\x1b \x01(\v2\x12.kratos.api.PolicyR\x06policy\x12!\n" +
+	"\x03cli\x18\x1c \x01(\v2\x0f.kratos.api.CLIR\x03cli\x12*\n" +
+	"\x06tuning\x18\x1d \x01(\v2\x12.kratos.api.TuningR\x06tuning\x120\n" +
+	"\btaildrop\x18\x1e \x01(\v2\x14.kratos.api.TaildropR\btaildrop\"J\n" +
+	"\bPrefixes\x12\x0e\n" +
+	"\x02v4\x18\x01 \x01(\tR\x02v4\x12\x0e\n" +
+	"\x02v6\x18\x02 \x01(\tR\x02v6\x12\x1e\n" +
+	"\n" +
+	"allocation\x18\x03 \x01(\tR\n" +
+	"allocation\"\xd2\x04\n" +
+	"\x04DERP\x12/\n" +
+	"\x06server\x18\x01 \x01(\v2\x17.kratos.api.DERP.ServerR\x06server\x12\x12\n" +
+	"\x04urls\x18\x02 \x03(\tR\x04urls\x12\x14\n" +
+	"\x05paths\x18\x03 \x03(\tR\x05paths\x12.\n" +
+	"\x13auto_update_enabled\x18\x04 \x01(\bR\x11autoUpdateEnabled\x12D\n" +
+	"\x10update_frequency\x18\x05 \x01(\v2\x19.google.protobuf.DurationR\x0fupdateFrequency\x1a\xf8\x02\n" +
+	"\x06Server\x12\x18\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabled\x12R\n" +
+	"&automatically_add_embedded_derp_region\x18\x02 \x01(\bR\"automaticallyAddEmbeddedDerpRegion\x12\x1b\n" +
+	"\tregion_id\x18\x03 \x01(\x05R\bregionId\x12\x1f\n" +
+	"\vregion_code\x18\x04 \x01(\tR\n" +
+	"regionCode\x12\x1f\n" +
+	"\vregion_name\x18\x05 \x01(\tR\n" +
+	"regionName\x12(\n" +
+	"\x10private_key_path\x18\x06 \x01(\tR\x0eprivateKeyPath\x12%\n" +
+	"\x0everify_clients\x18\a \x01(\bR\rverifyClients\x12(\n" +
+	"\x10stun_listen_addr\x18\b \x01(\tR\x0estunListenAddr\x12\x12\n" +
+	"\x04ipv4\x18\t \x01(\tR\x04ipv4\x12\x12\n" +
+	"\x04ipv6\x18\n" +
+	" \x01(\tR\x04ipv6\"\xa6\x03\n" +
+	"\x03DNS\x12\x1b\n" +
+	"\tmagic_dns\x18\x01 \x01(\bR\bmagicDns\x12\x1f\n" +
+	"\vbase_domain\x18\x02 \x01(\tR\n" +
+	"baseDomain\x12,\n" +
+	"\x12override_local_dns\x18\x03 \x01(\bR\x10overrideLocalDns\x12-\n" +
+	"\x12global_nameservers\x18\x04 \x03(\tR\x11globalNameservers\x12R\n" +
+	"\x11split_nameservers\x18\x05 \x03(\v2%.kratos.api.DNS.SplitNameserversEntryR\x10splitNameservers\x12%\n" +
+	"\x0esearch_domains\x18\x06 \x03(\tR\rsearchDomains\x12,\n" +
+	"\x12extra_records_path\x18\a \x01(\tR\x10extraRecordsPath\x1a[\n" +
+	"\x15SplitNameserversEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12,\n" +
+	"\x05value\x18\x02 \x01(\v2\x16.kratos.api.StringListR\x05value:\x028\x01\"$\n" +
+	"\n" +
+	"StringList\x12\x16\n" +
+	"\x06values\x18\x01 \x03(\tR\x06values\"\x91\x02\n" +
+	"\x03TLS\x12\x1b\n" +
+	"\tcert_path\x18\x01 \x01(\tR\bcertPath\x12\x19\n" +
+	"\bkey_path\x18\x02 \x01(\tR\akeyPath\x12-\n" +
+	"\x12letsencrypt_listen\x18\x03 \x01(\tR\x11letsencryptListen\x121\n" +
+	"\x14letsencrypt_hostname\x18\x04 \x01(\tR\x13letsencryptHostname\x122\n" +
+	"\x15letsencrypt_cache_dir\x18\x05 \x01(\tR\x13letsencryptCacheDir\x12<\n" +
+	"\x1aletsencrypt_challenge_type\x18\x06 \x01(\tR\x18letsencryptChallengeType\"\x8f\x05\n" +
+	"\x04OIDC\x12\x18\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabled\x12C\n" +
+	"\x1fonly_start_if_oidc_is_available\x18\x02 \x01(\bR\x1aonlyStartIfOidcIsAvailable\x12\x16\n" +
+	"\x06issuer\x18\x03 \x01(\tR\x06issuer\x12\x1b\n" +
+	"\tclient_id\x18\x04 \x01(\tR\bclientId\x12#\n" +
+	"\rclient_secret\x18\x05 \x01(\tR\fclientSecret\x12,\n" +
+	"\x12client_secret_path\x18\x06 \x01(\tR\x10clientSecretPath\x12\x14\n" +
+	"\x05scope\x18\a \x03(\tR\x05scope\x12D\n" +
+	"\fextra_params\x18\b \x03(\v2!.kratos.api.OIDC.ExtraParamsEntryR\vextraParams\x12'\n" +
+	"\x0fallowed_domains\x18\t \x03(\tR\x0eallowedDomains\x12#\n" +
+	"\rallowed_users\x18\n" +
+	" \x03(\tR\fallowedUsers\x12%\n" +
+	"\x0eallowed_groups\x18\v \x03(\tR\rallowedGroups\x126\n" +
+	"\x17email_verified_required\x18\f \x01(\bR\x15emailVerifiedRequired\x121\n" +
+	"\x15use_expiry_from_token\x18\r \x01(\bR\x12useExpiryFromToken\x12$\n" +
+	"\x04pkce\x18\x0e \x01(\v2\x10.kratos.api.PKCER\x04pkce\x1a>\n" +
+	"\x10ExtraParamsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"8\n" +
+	"\x04PKCE\x12\x18\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabled\x12\x16\n" +
+	"\x06method\x18\x02 \x01(\tR\x06method\"3\n" +
+	"\x03Log\x12\x14\n" +
+	"\x05level\x18\x01 \x01(\tR\x05level\x12\x16\n" +
+	"\x06format\x18\x02 \x01(\tR\x06format\"\x9a\x01\n" +
+	"\x04Node\x121\n" +
+	"\x06expiry\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\x06expiry\x123\n" +
+	"\tephemeral\x18\x02 \x01(\v2\x15.kratos.api.EphemeralR\tephemeral\x12*\n" +
+	"\x06routes\x18\x03 \x01(\v2\x12.kratos.api.RoutesR\x06routes\"U\n" +
+	"\tEphemeral\x12H\n" +
+	"\x12inactivity_timeout\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\x11inactivityTimeout\"(\n" +
+	"\x06Routes\x12\x1e\n" +
+	"\x02ha\x18\x01 \x01(\v2\x0e.kratos.api.HAR\x02ha\"\x86\x01\n" +
+	"\x02HA\x12@\n" +
+	"\x0eprobe_interval\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\rprobeInterval\x12>\n" +
+	"\rprobe_timeout\x18\x02 \x01(\v2\x19.google.protobuf.DurationR\fprobeTimeout\"0\n" +
+	"\x06Policy\x12\x12\n" +
+	"\x04mode\x18\x01 \x01(\tR\x04mode\x12\x12\n" +
+	"\x04path\x18\x02 \x01(\tR\x04path\"\x89\x01\n" +
+	"\x03CLI\x12\x18\n" +
+	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x17\n" +
+	"\aapi_key\x18\x02 \x01(\tR\x06apiKey\x123\n" +
+	"\atimeout\x18\x03 \x01(\v2\x19.google.protobuf.DurationR\atimeout\x12\x1a\n" +
+	"\binsecure\x18\x04 \x01(\bR\binsecure\"\xb0\x04\n" +
+	"\x06Tuning\x12M\n" +
+	"\x15notifier_send_timeout\x18\x01 \x01(\v2\x19.google.protobuf.DurationR\x13notifierSendTimeout\x12G\n" +
+	"\x12batch_change_delay\x18\x02 \x01(\v2\x19.google.protobuf.DurationR\x10batchChangeDelay\x12J\n" +
+	"\"node_mapsession_buffered_chan_size\x18\x03 \x01(\x05R\x1enodeMapsessionBufferedChanSize\x12'\n" +
+	"\x0fbatcher_workers\x18\x04 \x01(\x05R\x0ebatcherWorkers\x12U\n" +
+	"\x19register_cache_expiration\x18\x05 \x01(\v2\x19.google.protobuf.DurationR\x17registerCacheExpiration\x12;\n" +
+	"\x1aregister_cache_max_entries\x18\x06 \x01(\x05R\x17registerCacheMaxEntries\x121\n" +
+	"\x15node_store_batch_size\x18\a \x01(\x05R\x12nodeStoreBatchSize\x12R\n" +
+	"\x18node_store_batch_timeout\x18\b \x01(\v2\x19.google.protobuf.DurationR\x15nodeStoreBatchTimeout\"$\n" +
+	"\bTaildrop\x12\x18\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabledB5Z3github.com/juanfont/headscale-v2/internal/conf;confb\x06proto3"
 
 var (
 	file_conf_conf_proto_rawDescOnce sync.Once
@@ -462,33 +2030,83 @@ func file_conf_conf_proto_rawDescGZIP() []byte {
 	return file_conf_conf_proto_rawDescData
 }
 
-var file_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_conf_conf_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
 var file_conf_conf_proto_goTypes = []any{
 	(*Bootstrap)(nil),           // 0: kratos.api.Bootstrap
 	(*Server)(nil),              // 1: kratos.api.Server
 	(*Data)(nil),                // 2: kratos.api.Data
-	(*Server_HTTP)(nil),         // 3: kratos.api.Server.HTTP
-	(*Server_GRPC)(nil),         // 4: kratos.api.Server.GRPC
-	(*Data_Database)(nil),       // 5: kratos.api.Data.Database
-	(*Data_Redis)(nil),          // 6: kratos.api.Data.Redis
-	(*durationpb.Duration)(nil), // 7: google.protobuf.Duration
+	(*Headscale)(nil),           // 3: kratos.api.Headscale
+	(*Prefixes)(nil),            // 4: kratos.api.Prefixes
+	(*DERP)(nil),                // 5: kratos.api.DERP
+	(*DNS)(nil),                 // 6: kratos.api.DNS
+	(*StringList)(nil),          // 7: kratos.api.StringList
+	(*TLS)(nil),                 // 8: kratos.api.TLS
+	(*OIDC)(nil),                // 9: kratos.api.OIDC
+	(*PKCE)(nil),                // 10: kratos.api.PKCE
+	(*Log)(nil),                 // 11: kratos.api.Log
+	(*Node)(nil),                // 12: kratos.api.Node
+	(*Ephemeral)(nil),           // 13: kratos.api.Ephemeral
+	(*Routes)(nil),              // 14: kratos.api.Routes
+	(*HA)(nil),                  // 15: kratos.api.HA
+	(*Policy)(nil),              // 16: kratos.api.Policy
+	(*CLI)(nil),                 // 17: kratos.api.CLI
+	(*Tuning)(nil),              // 18: kratos.api.Tuning
+	(*Taildrop)(nil),            // 19: kratos.api.Taildrop
+	(*Server_HTTP)(nil),         // 20: kratos.api.Server.HTTP
+	(*Server_GRPC)(nil),         // 21: kratos.api.Server.GRPC
+	(*Data_Database)(nil),       // 22: kratos.api.Data.Database
+	(*Data_Redis)(nil),          // 23: kratos.api.Data.Redis
+	(*DERP_Server)(nil),         // 24: kratos.api.DERP.Server
+	nil,                         // 25: kratos.api.DNS.SplitNameserversEntry
+	nil,                         // 26: kratos.api.OIDC.ExtraParamsEntry
+	(*durationpb.Duration)(nil), // 27: google.protobuf.Duration
 }
 var file_conf_conf_proto_depIdxs = []int32{
 	1,  // 0: kratos.api.Bootstrap.server:type_name -> kratos.api.Server
 	2,  // 1: kratos.api.Bootstrap.data:type_name -> kratos.api.Data
-	3,  // 2: kratos.api.Server.http:type_name -> kratos.api.Server.HTTP
-	4,  // 3: kratos.api.Server.grpc:type_name -> kratos.api.Server.GRPC
-	5,  // 4: kratos.api.Data.database:type_name -> kratos.api.Data.Database
-	6,  // 5: kratos.api.Data.redis:type_name -> kratos.api.Data.Redis
-	7,  // 6: kratos.api.Server.HTTP.timeout:type_name -> google.protobuf.Duration
-	7,  // 7: kratos.api.Server.GRPC.timeout:type_name -> google.protobuf.Duration
-	7,  // 8: kratos.api.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
-	7,  // 9: kratos.api.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
-	10, // [10:10] is the sub-list for method output_type
-	10, // [10:10] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	3,  // 2: kratos.api.Bootstrap.headscale:type_name -> kratos.api.Headscale
+	20, // 3: kratos.api.Server.http:type_name -> kratos.api.Server.HTTP
+	21, // 4: kratos.api.Server.grpc:type_name -> kratos.api.Server.GRPC
+	22, // 5: kratos.api.Data.database:type_name -> kratos.api.Data.Database
+	23, // 6: kratos.api.Data.redis:type_name -> kratos.api.Data.Redis
+	4,  // 7: kratos.api.Headscale.prefixes:type_name -> kratos.api.Prefixes
+	5,  // 8: kratos.api.Headscale.derp:type_name -> kratos.api.DERP
+	6,  // 9: kratos.api.Headscale.dns:type_name -> kratos.api.DNS
+	8,  // 10: kratos.api.Headscale.tls:type_name -> kratos.api.TLS
+	9,  // 11: kratos.api.Headscale.oidc:type_name -> kratos.api.OIDC
+	11, // 12: kratos.api.Headscale.log:type_name -> kratos.api.Log
+	12, // 13: kratos.api.Headscale.node:type_name -> kratos.api.Node
+	16, // 14: kratos.api.Headscale.policy:type_name -> kratos.api.Policy
+	17, // 15: kratos.api.Headscale.cli:type_name -> kratos.api.CLI
+	18, // 16: kratos.api.Headscale.tuning:type_name -> kratos.api.Tuning
+	19, // 17: kratos.api.Headscale.taildrop:type_name -> kratos.api.Taildrop
+	24, // 18: kratos.api.DERP.server:type_name -> kratos.api.DERP.Server
+	27, // 19: kratos.api.DERP.update_frequency:type_name -> google.protobuf.Duration
+	25, // 20: kratos.api.DNS.split_nameservers:type_name -> kratos.api.DNS.SplitNameserversEntry
+	26, // 21: kratos.api.OIDC.extra_params:type_name -> kratos.api.OIDC.ExtraParamsEntry
+	10, // 22: kratos.api.OIDC.pkce:type_name -> kratos.api.PKCE
+	27, // 23: kratos.api.Node.expiry:type_name -> google.protobuf.Duration
+	13, // 24: kratos.api.Node.ephemeral:type_name -> kratos.api.Ephemeral
+	14, // 25: kratos.api.Node.routes:type_name -> kratos.api.Routes
+	27, // 26: kratos.api.Ephemeral.inactivity_timeout:type_name -> google.protobuf.Duration
+	15, // 27: kratos.api.Routes.ha:type_name -> kratos.api.HA
+	27, // 28: kratos.api.HA.probe_interval:type_name -> google.protobuf.Duration
+	27, // 29: kratos.api.HA.probe_timeout:type_name -> google.protobuf.Duration
+	27, // 30: kratos.api.CLI.timeout:type_name -> google.protobuf.Duration
+	27, // 31: kratos.api.Tuning.notifier_send_timeout:type_name -> google.protobuf.Duration
+	27, // 32: kratos.api.Tuning.batch_change_delay:type_name -> google.protobuf.Duration
+	27, // 33: kratos.api.Tuning.register_cache_expiration:type_name -> google.protobuf.Duration
+	27, // 34: kratos.api.Tuning.node_store_batch_timeout:type_name -> google.protobuf.Duration
+	27, // 35: kratos.api.Server.HTTP.timeout:type_name -> google.protobuf.Duration
+	27, // 36: kratos.api.Server.GRPC.timeout:type_name -> google.protobuf.Duration
+	27, // 37: kratos.api.Data.Redis.read_timeout:type_name -> google.protobuf.Duration
+	27, // 38: kratos.api.Data.Redis.write_timeout:type_name -> google.protobuf.Duration
+	7,  // 39: kratos.api.DNS.SplitNameserversEntry.value:type_name -> kratos.api.StringList
+	40, // [40:40] is the sub-list for method output_type
+	40, // [40:40] is the sub-list for method input_type
+	40, // [40:40] is the sub-list for extension type_name
+	40, // [40:40] is the sub-list for extension extendee
+	0,  // [0:40] is the sub-list for field type_name
 }
 
 func init() { file_conf_conf_proto_init() }
@@ -502,7 +2120,7 @@ func file_conf_conf_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_conf_conf_proto_rawDesc), len(file_conf_conf_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   27,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -5,7 +5,117 @@ server:
   grpc:
     addr: 0.0.0.0:9090
     timeout: 10s
+
 data:
   database:
     driver: sqlite3
     source: file:headscale.db?cache=shared&_fk=1
+    debug: false
+
+headscale:
+  server_url: "http://localhost:8080"
+  listen_addr: "0.0.0.0:8080"
+  metrics_addr: "127.0.0.1:9090"
+  grpc_addr: "127.0.0.1:50443"
+  grpc_allow_insecure: false
+  base_domain: "headscale.net"
+  noise_private_key_path: "/var/lib/headscale/noise_private.key"
+  disable_update_check: false
+  unix_socket: "/var/run/headscale/headscale.sock"
+  unix_socket_permission: "0o770"
+  randomize_client_port: false
+  acme_url: ""
+  acme_email: ""
+
+  prefixes:
+    v4: "100.64.0.0/10"
+    v6: "fd7a:115c:a1e0::/48"
+    allocation: "sequential"
+
+  derp:
+    server:
+      enabled: false
+      automatically_add_embedded_derp_region: true
+      region_id: 999
+      region_code: "headscale"
+      region_name: "Headscale Embedded DERP"
+      private_key_path: ""
+      verify_clients: true
+      stun_listen_addr: "0.0.0.0:3478"
+      ipv4: ""
+      ipv6: ""
+    urls: []
+    paths: []
+    auto_update_enabled: false
+    update_frequency: "3h"
+
+  dns:
+    magic_dns: true
+    base_domain: ""
+    override_local_dns: true
+    global_nameservers: []
+    split_nameservers: {}
+    search_domains: []
+    extra_records_path: ""
+
+  tls:
+    cert_path: ""
+    key_path: ""
+    letsencrypt_listen: ""
+    letsencrypt_hostname: ""
+    letsencrypt_cache_dir: "/var/www/.cache"
+    letsencrypt_challenge_type: "HTTP-01"
+
+  oidc:
+    enabled: false
+    only_start_if_oidc_is_available: true
+    issuer: ""
+    client_id: ""
+    client_secret: ""
+    client_secret_path: ""
+    scope: ["openid", "profile", "email"]
+    extra_params: {}
+    allowed_domains: []
+    allowed_users: []
+    allowed_groups: []
+    email_verified_required: true
+    use_expiry_from_token: false
+    pkce:
+      enabled: false
+      method: "S256"
+
+  log:
+    level: "info"
+    format: "text"
+
+  node:
+    expiry: "0"
+    ephemeral:
+      inactivity_timeout: "120s"
+    routes:
+      ha:
+        probe_interval: "10s"
+        probe_timeout: "5s"
+
+  policy:
+    mode: "file"
+    path: ""
+
+  cli:
+    address: "localhost:50443"
+    api_key: ""
+    timeout: "5s"
+    insecure: false
+
+  tuning:
+    notifier_send_timeout: "800ms"
+    batch_change_delay: "800ms"
+    node_mapsession_buffered_chan_size: 30
+    batcher_workers: 1
+    register_cache_expiration: "0"
+    register_cache_max_entries: 0
+    node_store_batch_size: 100
+    node_store_batch_timeout: "500ms"
+
+  taildrop:
+    enabled: true

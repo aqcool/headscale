@@ -104,11 +104,11 @@ func (s *State) UpdateUser(userID types.UserID, updateFn func(*types.User) error
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	if s.db == nil {
+	if s.repo == nil {
 		return nil, types.Change{}, errors.New("database not available")
 	}
 
-	user, err := s.db.UpdateUser(userID, updateFn)
+	user, err := s.repo.UpdateUser(userID, updateFn)
 	if err != nil {
 		return nil, types.Change{}, err
 	}
@@ -129,27 +129,27 @@ func (s *State) CreateAPIKey(expiration *time.Time) (string, *types.APIKey, erro
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	if s.db == nil {
+	if s.repo == nil {
 		return "", nil, errors.New("database not available")
 	}
 
-	return s.db.CreateAPIKey(expiration)
+	return s.repo.CreateAPIKey(expiration)
 }
 
 // GetAPIKey gets an API key by prefix.
 func (s *State) GetAPIKey(displayPrefix string) (*types.APIKey, error) {
-	if s.db == nil {
+	if s.repo == nil {
 		return nil, errors.New("database not available")
 	}
-	return s.db.GetAPIKey(displayPrefix)
+	return s.repo.GetAPIKey(displayPrefix)
 }
 
 // GetAPIKeyByID gets an API key by ID.
 func (s *State) GetAPIKeyByID(id uint64) (*types.APIKey, error) {
-	if s.db == nil {
+	if s.repo == nil {
 		return nil, errors.New("database not available")
 	}
-	return s.db.GetAPIKeyByID(id)
+	return s.repo.GetAPIKeyByID(id)
 }
 
 // ExpireAPIKey expires an API key.
@@ -157,19 +157,19 @@ func (s *State) ExpireAPIKey(key *types.APIKey) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	if s.db == nil {
+	if s.repo == nil {
 		return errors.New("database not available")
 	}
 
-	return s.db.ExpireAPIKey(key)
+	return s.repo.ExpireAPIKey(key)
 }
 
 // ListAPIKeys lists all API keys.
 func (s *State) ListAPIKeys() ([]types.APIKey, error) {
-	if s.db == nil {
+	if s.repo == nil {
 		return nil, errors.New("database not available")
 	}
-	return s.db.ListAPIKeys()
+	return s.repo.ListAPIKeys()
 }
 
 // DestroyAPIKey destroys an API key.
@@ -177,11 +177,11 @@ func (s *State) DestroyAPIKey(key types.APIKey) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	if s.db == nil {
+	if s.repo == nil {
 		return errors.New("database not available")
 	}
 
-	return s.db.DestroyAPIKey(key)
+	return s.repo.DestroyAPIKey(key)
 }
 
 // SetNodeUnhealthy sets the unhealthy status for a node.
@@ -368,18 +368,18 @@ func (s *State) ListAllUsers() ([]types.User, error) {
 
 // ListPreAuthKeys lists all pre-auth keys.
 func (s *State) ListPreAuthKeys() ([]types.PreAuthKey, error) {
-	if s.db == nil {
+	if s.repo == nil {
 		return nil, errors.New("database not available")
 	}
-	return s.db.ListPreAuthKeys()
+	return s.repo.ListPreAuthKeys()
 }
 
 // GetPolicy retrieves the current policy.
 func (s *State) GetPolicy() (*types.Policy, error) {
-	if s.db == nil {
+	if s.repo == nil {
 		return nil, errors.New("database not available")
 	}
-	return s.db.GetPolicy()
+	return s.repo.GetPolicy()
 }
 
 // DeletePreAuthKey deletes a pre-auth key.
@@ -387,9 +387,9 @@ func (s *State) DeletePreAuthKey(id uint64) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	if s.db == nil {
+	if s.repo == nil {
 		return errors.New("database not available")
 	}
 
-	return s.db.DeletePreAuthKey(id)
+	return s.repo.DeletePreAuthKey(id)
 }

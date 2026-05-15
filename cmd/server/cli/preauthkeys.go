@@ -126,10 +126,10 @@ var createPreAuthKeyCmd = &cobra.Command{
 
 		client := v1.NewHeadscaleServiceClient(conn)
 		resp, err := client.CreatePreAuthKey(ctx, &v1.CreatePreAuthKeyRequest{
-			Reusable:  reusable,
-			Ephemeral: ephemeral,
+			Reusable:   reusable,
+			Ephemeral:  ephemeral,
 			Expiration: expiration,
-			AclTags:   tags,
+			AclTags:    tags,
 		})
 		if err != nil {
 			return fmt.Errorf("creating pre-auth key: %w", err)

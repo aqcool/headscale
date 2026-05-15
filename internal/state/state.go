@@ -10,13 +10,11 @@ import (
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
-	"github.com/juanfont/headscale-v2/internal/db"
 	"github.com/juanfont/headscale-v2/internal/ip"
 	"github.com/juanfont/headscale-v2/internal/policy"
 	"github.com/juanfont/headscale-v2/internal/policy/matcher"
 	"github.com/juanfont/headscale-v2/internal/types"
 	"github.com/juanfont/headscale-v2/internal/util"
-	"gorm.io/gorm"
 	"tailscale.com/tailcfg"
 	"tailscale.com/types/key"
 	"tailscale.com/types/views"
@@ -34,7 +32,7 @@ type State struct {
 	mu sync.RWMutex
 
 	nodeStore  *NodeStore
-	db         *db.HSDatabase
+	repo       StateRepository
 	ipAlloc    *ip.IPAllocator
 	derpMap    atomic.Pointer[tailcfg.DERPMap]
 	authCache  sync.Map
@@ -60,14 +58,14 @@ type StateConfig struct {
 	BatchSize     int
 	BatchTimeout  time.Duration
 	IPAlloc       *ip.IPAllocator
-	DB            *db.HSDatabase
+	Repo          StateRepository
 	Config        *types.Config
 }
 
 func NewState(cfg *StateConfig, logger log.Logger) *State {
 	s := &State{
 		ipAlloc:      cfg.IPAlloc,
-		db:           cfg.DB,
+		repo:         cfg.Repo,
 		cfg:          cfg.Config,
 		logger:       log.NewHelper(logger),
 		sshCheckAuth: make(map[sshCheckPair]time.Time),
@@ -97,9 +95,7 @@ func (s *State) persistNodeToDB(node types.NodeView) (types.NodeView, types.Chan
 
 	nodePtr := node.AsStruct()
 
-	err := s.db.Write(func(tx *gorm.DB) error {
-		return tx.Select(nodeUpdateColumns).Omit("Expiry").Updates(nodePtr).Error
-	})
+	err := s.repo.PersistNode(nodePtr, nodeUpdateColumns, []string{"Expiry"})
 	if err != nil {
 		return types.NodeView{}, types.Change{}, fmt.Errorf("saving node: %w", err)
 	}
@@ -127,9 +123,7 @@ func (s *State) SaveNode(node types.NodeView) (types.NodeView, types.Change, err
 func (s *State) DeleteNode(node types.NodeView) (types.Change, error) {
 	s.nodeStore.DeleteNode(node.ID())
 
-	err := s.db.Write(func(tx *gorm.DB) error {
-		return tx.Delete(node.AsStruct()).Error
-	})
+	err := s.repo.DeleteNode(node.AsStruct())
 	if err != nil {
 		return types.Change{}, err
 	}
@@ -374,9 +368,7 @@ func (s *State) HandleNodeFromPreAuthKey(
 		}
 
 		// Persist to database
-		err := s.db.Write(func(tx *gorm.DB) error {
-			return tx.Select(nodeUpdateColumns).Updates(updatedNode.AsStruct()).Error
-		})
+		err := s.repo.PersistNode(updatedNode.AsStruct(), nodeUpdateColumns, nil)
 		if err != nil {
 			return types.NodeView{}, types.Change{}, fmt.Errorf("saving node: %w", err)
 		}
@@ -495,20 +487,18 @@ func (s *State) createAndSaveNewNode(params newNodeParams) (types.NodeView, erro
 
 	// Save to database
 	var savedNode *types.Node
-	err := s.db.Write(func(tx *gorm.DB) error {
-		if err := tx.Save(&nodeToRegister).Error; err != nil {
-			return fmt.Errorf("saving node: %w", err)
-		}
+	err := s.repo.SaveNode(&nodeToRegister)
+	if err != nil {
+		return types.NodeView{}, fmt.Errorf("saving node: %w", err)
+	}
 
-		if params.PreAuthKey != nil && !params.PreAuthKey.Reusable {
-			if err := s.UsePreAuthKey(params.PreAuthKey); err != nil {
-				return fmt.Errorf("using pre auth key: %w", err)
-			}
+	if params.PreAuthKey != nil && !params.PreAuthKey.Reusable {
+		if err := s.UsePreAuthKey(params.PreAuthKey); err != nil {
+			s.logger.Warnf("failed to mark pre-auth key as used: %v", err)
 		}
+	}
 
-		savedNode = &nodeToRegister
-		return nil
-	})
+	savedNode = &nodeToRegister
 	if err != nil {
 		return types.NodeView{}, err
 	}
@@ -582,22 +572,22 @@ func (s *State) CreateUser(name string) (*types.User, error) {
 }
 
 func (s *State) GetUserByID(userID types.UserID) (*types.User, error) {
-	if s.db != nil {
-		return s.db.GetUserByID(userID)
+	if s.repo != nil {
+		return s.repo.GetUserByID(userID)
 	}
 	return &types.User{ID: userID}, nil
 }
 
 func (s *State) GetUserByName(name string) (*types.User, error) {
-	if s.db != nil {
-		return s.db.GetUserByName(name)
+	if s.repo != nil {
+		return s.repo.GetUserByName(name)
 	}
 	return &types.User{Name: name}, nil
 }
 
 func (s *State) ListUsers() ([]types.User, error) {
-	if s.db != nil {
-		return s.db.ListUsers()
+	if s.repo != nil {
+		return s.repo.ListUsers()
 	}
 	return []types.User{}, nil
 }
@@ -609,17 +599,15 @@ func (s *State) DeleteUser(userID types.UserID) error {
 // PreAuthKey methods
 
 func (s *State) GetPreAuthKey(id string) (*types.PreAuthKey, error) {
-	if s.db != nil {
-		return s.db.GetPreAuthKey(id)
+	if s.repo != nil {
+		return s.repo.GetPreAuthKey(id)
 	}
 	return nil, errors.New("database not available")
 }
 
 func (s *State) UsePreAuthKey(pak *types.PreAuthKey) error {
-	if s.db != nil {
-		return s.db.Write(func(tx *gorm.DB) error {
-			return db.UsePreAuthKey(tx, pak)
-		})
+	if s.repo != nil {
+		return s.repo.UsePreAuthKey(pak)
 	}
 	return nil
 }
@@ -640,8 +628,8 @@ func (s *State) CreatePreAuthKey(userID uint64, reusable bool, ephemeral bool, e
 // Health check methods
 
 func (s *State) PingDB(ctx context.Context) error {
-	if s.db != nil {
-		return s.db.PingDB(ctx)
+	if s.repo != nil {
+		return s.repo.PingDB(ctx)
 	}
 	return nil
 }
@@ -713,10 +701,10 @@ func (s *State) DebugString() string {
 }
 
 func (s *State) GetUserByProviderIdentifier(identifier string) (*types.User, error) {
-	if s.db == nil {
+	if s.repo == nil {
 		return nil, ErrUserNotFound
 	}
-	users, err := s.db.ListUsers()
+	users, err := s.repo.ListUsers()
 	if err != nil {
 		return nil, err
 	}

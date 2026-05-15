@@ -2,14 +2,16 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 
+	"github.com/juanfont/headscale-v2/cmd/server/cli"
 	"github.com/juanfont/headscale-v2/internal/conf"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
 	"github.com/go-kratos/kratos/v2/config/file"
-	"github.com/go-kratos/kratos/v2/log"
+	klog "github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/tracing"
 	"github.com/go-kratos/kratos/v2/transport/grpc"
 	"github.com/go-kratos/kratos/v2/transport/http"
@@ -17,13 +19,9 @@ import (
 	_ "go.uber.org/automaxprocs"
 )
 
-// go build -ldflags "-X main.Version=x.y.z"
 var (
-	// Name is the name of the compiled software.
-	Name string = "headscale-v2"
-	// Version is the version of the compiled software.
+	Name    string = "headscale-v2"
 	Version string = "1.0.0"
-	// flagconf is the config flag.
 	flagconf string
 
 	id, _ = os.Hostname()
@@ -33,7 +31,7 @@ func init() {
 	flag.StringVar(&flagconf, "conf", "../../configs", "config path, eg: -conf config.yaml")
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
+func newApp(logger klog.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
 	return kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),
@@ -47,11 +45,11 @@ func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
 	)
 }
 
-func main() {
+func runKratosApp() {
 	flag.Parse()
-	logger := log.With(log.NewStdLogger(os.Stdout),
-		"ts", log.DefaultTimestamp,
-		"caller", log.DefaultCaller,
+	logger := klog.With(klog.NewStdLogger(os.Stdout),
+		"ts", klog.DefaultTimestamp,
+		"caller", klog.DefaultCaller,
 		"service.id", id,
 		"service.name", Name,
 		"service.version", Version,
@@ -74,14 +72,34 @@ func main() {
 		panic(err)
 	}
 
-	app, cleanup, err := wireApp(bc.Server, bc.Data, logger)
+	app, cleanup, err := wireApp(bc.Server, bc.Data, bc.Headscale, logger)
 	if err != nil {
 		panic(err)
 	}
 	defer cleanup()
 
-	// start and wait for stop signal
 	if err := app.Run(); err != nil {
 		panic(err)
 	}
+}
+
+func main() {
+	if len(os.Args) > 1 {
+		cmd := os.Args[1]
+		switch cmd {
+		case "serve", "migrate":
+			runKratosApp()
+			return
+		}
+	}
+
+	flag.Usage = func() {
+		fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s:\n", os.Args[0])
+		flag.PrintDefaults()
+		fmt.Fprintf(flag.CommandLine.Output(), "\nSubcommands:\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "  serve      Start the headscale server\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "  <command>  Run a CLI command (users, nodes, apikeys, etc.)\n")
+	}
+
+	cli.Execute()
 }

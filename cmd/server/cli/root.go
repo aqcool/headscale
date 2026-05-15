@@ -147,3 +147,7 @@ func checkForUpdate() {
 		!versionInfo.Dirty {
 	}
 }
+
+func GetRootCmd() *cobra.Command {
+	return rootCmd
+}

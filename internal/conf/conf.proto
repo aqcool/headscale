@@ -8,6 +8,7 @@ import "google/protobuf/duration.proto";
 message Bootstrap {
   Server server = 1;
   Data data = 2;
+  Headscale headscale = 3;
 }
 
 message Server {
@@ -29,6 +30,7 @@ message Data {
   message Database {
     string driver = 1;
     string source = 2;
+    bool debug = 3;
   }
   message Redis {
     string network = 1;
@@ -38,4 +40,154 @@ message Data {
   }
   Database database = 1;
   Redis redis = 2;
+}
+
+message Headscale {
+  string server_url = 1;
+  string listen_addr = 2;
+  string metrics_addr = 3;
+  string grpc_addr = 4;
+  bool grpc_allow_insecure = 5;
+  string base_domain = 6;
+  string noise_private_key_path = 7;
+  bool disable_update_check = 8;
+  string unix_socket = 9;
+  string unix_socket_permission = 10;
+  bool randomize_client_port = 11;
+  string acme_url = 12;
+  string acme_email = 13;
+
+  Prefixes prefixes = 20;
+  DERP derp = 21;
+  DNS dns = 22;
+  TLS tls = 23;
+  OIDC oidc = 24;
+  Log log = 25;
+  Node node = 26;
+  Policy policy = 27;
+  CLI cli = 28;
+  Tuning tuning = 29;
+  Taildrop taildrop = 30;
+}
+
+message Prefixes {
+  string v4 = 1;
+  string v6 = 2;
+  string allocation = 3;
+}
+
+message DERP {
+  message Server {
+    bool enabled = 1;
+    bool automatically_add_embedded_derp_region = 2;
+    int32 region_id = 3;
+    string region_code = 4;
+    string region_name = 5;
+    string private_key_path = 6;
+    bool verify_clients = 7;
+    string stun_listen_addr = 8;
+    string ipv4 = 9;
+    string ipv6 = 10;
+  }
+  Server server = 1;
+  repeated string urls = 2;
+  repeated string paths = 3;
+  bool auto_update_enabled = 4;
+  google.protobuf.Duration update_frequency = 5;
+}
+
+message DNS {
+  bool magic_dns = 1;
+  string base_domain = 2;
+  bool override_local_dns = 3;
+  repeated string global_nameservers = 4;
+  map<string, StringList> split_nameservers = 5;
+  repeated string search_domains = 6;
+  string extra_records_path = 7;
+}
+
+message StringList {
+  repeated string values = 1;
+}
+
+message TLS {
+  string cert_path = 1;
+  string key_path = 2;
+  string letsencrypt_listen = 3;
+  string letsencrypt_hostname = 4;
+  string letsencrypt_cache_dir = 5;
+  string letsencrypt_challenge_type = 6;
+}
+
+message OIDC {
+  bool enabled = 1;
+  bool only_start_if_oidc_is_available = 2;
+  string issuer = 3;
+  string client_id = 4;
+  string client_secret = 5;
+  string client_secret_path = 6;
+  repeated string scope = 7;
+  map<string, string> extra_params = 8;
+  repeated string allowed_domains = 9;
+  repeated string allowed_users = 10;
+  repeated string allowed_groups = 11;
+  bool email_verified_required = 12;
+  bool use_expiry_from_token = 13;
+  PKCE pkce = 14;
+}
+
+message PKCE {
+  bool enabled = 1;
+  string method = 2;
+}
+
+message Log {
+  string level = 1;
+  string format = 2;
+}
+
+message Node {
+  google.protobuf.Duration expiry = 1;
+  Ephemeral ephemeral = 2;
+  Routes routes = 3;
+}
+
+message Ephemeral {
+  google.protobuf.Duration inactivity_timeout = 1;
+}
+
+message Routes {
+  HA ha = 1;
+}
+
+message HA {
+  google.protobuf.Duration probe_interval = 1;
+  google.protobuf.Duration probe_timeout = 2;
+}
+
+message Policy {
+  string mode = 1;
+  string path = 2;
+}
+
+message CLI {
+  string address = 1;
+  string api_key = 2;
+  google.protobuf.Duration timeout = 3;
+  bool insecure = 4;
+}
+
+message Tuning {
+  google.protobuf.Duration notifier_send_timeout = 1;
+  google.protobuf.Duration batch_change_delay = 2;
+  int32 node_mapsession_buffered_chan_size = 3;
+  int32 batcher_workers = 4;
+  google.protobuf.Duration register_cache_expiration = 5;
+  int32 register_cache_max_entries = 6;
+  int32 node_store_batch_size = 7;
+  google.protobuf.Duration node_store_batch_timeout = 8;
+}
+
+message Taildrop {
+  bool enabled = 1;
 }
