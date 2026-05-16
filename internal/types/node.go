@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/juanfont/headscale-v2/internal/policy/matcher"
-	"github.com/rs/zerolog"
 	"go4.org/netipx"
 	"tailscale.com/tailcfg"
 	"tailscale.com/types/key"
@@ -272,33 +271,6 @@ func (node *Node) Prefixes() []netip.Prefix {
 
 func (node *Node) String() string {
 	return node.Hostname
-}
-
-// MarshalZerologObject implements zerolog.LogObjectMarshaler for safe logging.
-func (node *Node) MarshalZerologObject(e *zerolog.Event) {
-	if node == nil {
-		return
-	}
-
-	e.Uint64("node.id", uint64(node.ID))
-	e.Str("node.name", node.Hostname)
-	e.Bool("node.is_tagged", node.IsTagged())
-	e.Bool("node.expired", node.IsExpired())
-
-	if node.IsOnline != nil {
-		e.Bool("node.online", *node.IsOnline)
-	}
-
-	if len(node.Tags) > 0 {
-		e.Strs("node.tags", node.Tags)
-	}
-
-	if node.IPv4 != nil {
-		e.Str("node.ipv4", node.IPv4.String())
-	}
-	if node.IPv6 != nil {
-		e.Str("node.ipv6", node.IPv6.String())
-	}
 }
 
 func (node *Node) AppendToIPSet(builder *netipx.IPSetBuilder) {

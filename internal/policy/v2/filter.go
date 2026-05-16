@@ -12,7 +12,6 @@ import (
 
 	"github.com/juanfont/headscale-v2/internal/types"
 	"github.com/juanfont/headscale-v2/internal/util"
-	"github.com/rs/zerolog/log"
 	"go4.org/netipx"
 	"tailscale.com/tailcfg"
 	"tailscale.com/types/views"
@@ -166,13 +165,9 @@ func (pol *Policy) destinationsToNetPortRange(
 			continue
 		}
 
-		ips, err := dest.Resolve(pol, users, nodes)
-		if err != nil {
-			log.Trace().Caller().Err(err).Msgf("resolving destination ips")
-		}
+		ips, _ := dest.Resolve(pol, users, nodes)
 
 		if ips == nil {
-			log.Debug().Caller().Msgf("destination resolved to nil ips: %v", dest)
 			continue
 		}
 
@@ -268,8 +263,6 @@ func (pol *Policy) compileSSHPolicy(
 		return nil, nil //nolint:nilnil // intentional: no SSH policy when none configured
 	}
 
-	log.Trace().Caller().Msgf("compiling SSH policy for node %q", node.Hostname())
-
 	var rules []*tailcfg.SSHRule
 
 	for index, rule := range pol.SSHs {
@@ -283,12 +276,7 @@ func (pol *Policy) compileSSHPolicy(
 			}
 		}
 
-		srcIPs, err := rule.Sources.Resolve(pol, users, nodes)
-		if err != nil {
-			log.Trace().Caller().Err(err).Msgf(
-				"ssh policy compilation failed resolving source ips for rule %+v", rule,
-			)
-		}
+		srcIPs, _ := rule.Sources.Resolve(pol, users, nodes)
 
 		if srcIPs == nil || len(srcIPs.Prefixes()) == 0 {
 			continue
@@ -304,7 +292,7 @@ func (pol *Policy) compileSSHPolicy(
 		default:
 			return nil, fmt.Errorf(
 				"parsing SSH policy, unknown action %q, index: %d: %w",
-				rule.Action, index, err,
+				rule.Action, index, ErrInvalidAction,
 			)
 		}
 
@@ -379,11 +367,7 @@ func (pol *Policy) compileSSHPolicy(
 			var dest netipx.IPSetBuilder
 
 			for _, dst := range otherDests {
-				ips, err := dst.Resolve(pol, users, nodes)
-				if err != nil {
-					log.Trace().Caller().Err(err).
-						Msgf("resolving destination ips")
-				}
+				ips, _ := dst.Resolve(pol, users, nodes)
 
 				if ips != nil {
 					for _, pref := range ips.Prefixes() {
@@ -527,10 +511,7 @@ func resolveLocalparts(
 	for _, entry := range entries {
 		domain, err := entry.ParseLocalpart()
 		if err != nil {
-			log.Warn().Err(err).Msgf(
-				"skipping invalid localpart entry %q during SSH compilation",
-				entry,
-			)
+			fmt.Printf("[WARN] skipping invalid localpart entry %q during SSH compilation: %v\n", entry, err)
 
 			continue
 		}

@@ -10,7 +10,6 @@ import (
 	"time"
 
 	v1 "github.com/juanfont/headscale-v2/api/proto/v1"
-	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"
@@ -263,7 +262,6 @@ func getGRPCContext() (context.Context, *grpc.ClientConn, error) {
 		conn.Close()
 	}()
 
-	log.Debug().Str("addr", addr).Msg("Connected to gRPC server")
 	return ctx, conn, nil
 }
 

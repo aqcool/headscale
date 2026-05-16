@@ -11,7 +11,6 @@ import (
 
 	"github.com/juanfont/headscale-v2/internal/types"
 	"github.com/juanfont/headscale-v2/internal/util"
-	"github.com/rs/zerolog/log"
 	"go4.org/netipx"
 	"gorm.io/gorm"
 	"tailscale.com/net/tsaddr"
@@ -291,16 +290,12 @@ func (db *HSDatabase) BackfillNodeIPs(i *IPAllocator) ([]string, error) {
 			return fmt.Errorf("backfilling IPs: %w", errIPAllocatorNil)
 		}
 
-		log.Trace().Caller().Msgf("starting to backfill IPs")
-
 		nodes, err := ListNodes(tx)
 		if err != nil {
 			return fmt.Errorf("listing nodes to backfill IPs: %w", err)
 		}
 
 		for _, node := range nodes {
-			log.Trace().Caller().EmbedObject(node).Msg("ip backfill check started because node found in database")
-
 			changed := false
 			// IPv4 prefix is set, but node ip is missing, alloc
 			if i.prefix4 != nil && node.IPv4 == nil {

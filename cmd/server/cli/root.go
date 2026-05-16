@@ -4,12 +4,10 @@ import (
 	"fmt"
 	"os"
 	"runtime"
-	"slices"
 	"strings"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/juanfont/headscale-v2/internal/types"
-	"github.com/rs/zerolog"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -19,11 +17,6 @@ var cfgFile string
 func init() {
 	if len(os.Args) > 1 &&
 		(os.Args[1] == "version" || os.Args[1] == "completion") {
-		return
-	}
-
-	if slices.Contains(os.Args, "policy") && slices.Contains(os.Args, "check") {
-		zerolog.SetGlobalLevel(zerolog.Disabled)
 		return
 	}
 
@@ -53,17 +46,6 @@ func initConfig() {
 
 	if err := types.LoadConfig(cfgFile, isFile); err != nil {
 		log.Fatalf("error loading config file %s: %v", cfgFile, err)
-	}
-
-	machineOutput := hasMachineOutputFlag()
-
-	if machineOutput {
-		zerolog.SetGlobalLevel(zerolog.Disabled)
-	}
-
-	logFormat := viper.GetString("log.format")
-	if logFormat == "json" {
-		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
 }
 

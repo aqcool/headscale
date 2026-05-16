@@ -2,10 +2,6 @@ package types
 
 import (
 	"time"
-
-	"github.com/juanfont/headscale-v2/internal/util/zlog/zf"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 )
 
 type PAKError string
@@ -50,8 +46,6 @@ func (key *PreAuthKey) Validate() error {
 		return PAKError("invalid authkey")
 	}
 
-	log.Debug().Caller().EmbedObject(key).Msg("PreAuthKey.Validate: checking key")
-
 	if key.Expiration != nil && key.Expiration.Before(time.Now()) {
 		return PAKError("authkey expired")
 	}
@@ -94,32 +88,4 @@ func (pak *PreAuthKey) maskedPrefix() string {
 		return "hskey-auth-" + pak.Prefix + "-***"
 	}
 	return ""
-}
-
-func (pak *PreAuthKey) MarshalZerologObject(e *zerolog.Event) {
-	if pak == nil {
-		return
-	}
-
-	e.Uint64(zf.PAKID, pak.ID)
-	e.Bool(zf.PAKReusable, pak.Reusable)
-	e.Bool(zf.PAKEphemeral, pak.Ephemeral)
-	e.Bool(zf.PAKUsed, pak.Used)
-	e.Bool(zf.PAKIsTagged, pak.IsTagged())
-
-	if masked := pak.maskedPrefix(); masked != "" {
-		e.Str(zf.PAKPrefix, masked)
-	}
-
-	if len(pak.Tags) > 0 {
-		e.Strs(zf.PAKTags, pak.Tags)
-	}
-
-	if pak.User != nil {
-		e.Str(zf.UserName, pak.User.Username())
-	}
-
-	if pak.Expiration != nil {
-		e.Time(zf.PAKExpiration, *pak.Expiration)
-	}
 }

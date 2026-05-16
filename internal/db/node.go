@@ -14,8 +14,6 @@ import (
 
 	"github.com/juanfont/headscale-v2/internal/types"
 	"github.com/juanfont/headscale-v2/internal/util"
-	"github.com/juanfont/headscale-v2/internal/util/zlog/zf"
-	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 	"tailscale.com/net/tsaddr"
 	"tailscale.com/types/key"
@@ -366,25 +364,6 @@ func RegisterNodeForTest(tx *gorm.DB, node types.Node, ipv4 *netip.Addr, ipv6 *n
 		panic("RegisterNodeForTest can only be called during tests")
 	}
 
-	logEvent := log.Debug().
-		Str(zf.NodeHostname, node.Hostname).
-		Str(zf.MachineKey, node.MachineKey.ShortString()).
-		Str(zf.NodeKey, node.NodeKey.ShortString())
-
-	if node.User != nil {
-		logEvent = logEvent.Str(zf.UserName, node.User.Username())
-	} else if node.UserID != nil {
-		logEvent = logEvent.Uint(zf.UserID, *node.UserID)
-	} else {
-		logEvent = logEvent.Str(zf.UserName, "none")
-	}
-
-	logEvent.Msg("registering test node")
-
-	// If the a new node is registered with the same machine key, to the same user,
-	// update the existing node.
-	// If the same node is registered again, but to a new user, then that is considered
-	// a new node.
 	oldNode, _ := GetNodeByMachineKey(tx, node.MachineKey)
 	if oldNode != nil && oldNode.UserID == node.UserID {
 		node.ID = oldNode.ID
@@ -409,14 +388,6 @@ func RegisterNodeForTest(tx *gorm.DB, node types.Node, ipv4 *netip.Addr, ipv6 *n
 			return nil, fmt.Errorf("registering existing node in database: %w", err)
 		}
 
-		log.Trace().
-			Caller().
-			Str(zf.NodeHostname, node.Hostname).
-			Str(zf.MachineKey, node.MachineKey.ShortString()).
-			Str(zf.NodeKey, node.NodeKey.ShortString()).
-			Str(zf.UserName, node.User.Username()).
-			Msg("Test node authorized again")
-
 		return &node, nil
 	}
 
@@ -433,11 +404,6 @@ func RegisterNodeForTest(tx *gorm.DB, node types.Node, ipv4 *netip.Addr, ipv6 *n
 	if err := tx.Save(&node).Error; err != nil { //nolint:noinlineerr
 		return nil, fmt.Errorf("saving node to database: %w", err)
 	}
-
-	log.Trace().
-		Caller().
-		Str(zf.NodeHostname, node.Hostname).
-		Msg("Test node registered with the database")
 
 	return &node, nil
 }

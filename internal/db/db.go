@@ -18,7 +18,6 @@ import (
 	"github.com/juanfont/headscale-v2/internal/policy"
 	"github.com/juanfont/headscale-v2/internal/types"
 	"github.com/juanfont/headscale-v2/internal/util"
-	"github.com/rs/zerolog/log"
 	"github.com/tailscale/squibble"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -248,11 +247,11 @@ AND auth_key_id NOT IN (
 				Migrate: func(tx *gorm.DB) error {
 					// Only run on SQLite
 					if cfg.Database.Type != types.DatabaseSqlite {
-						log.Info().Msg("skipping schema migration on non-SQLite database")
+						fmt.Printf("[INFO] skipping schema migration on non-SQLite database\n")
 						return nil
 					}
 
-					log.Info().Msg("starting schema recreation with table renaming")
+					fmt.Printf("[INFO] starting schema recreation with table renaming\n")
 
 					// Rename existing tables to _old versions
 					tablesToRename := []string{"users", "pre_auth_keys", "api_keys", "nodes", "policies"}
@@ -262,7 +261,7 @@ AND auth_key_id NOT IN (
 
 					err := tx.Raw("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='routes'").Row().Scan(&routesExists)
 					if err == nil && routesExists {
-						log.Info().Msg("dropping leftover routes table")
+						fmt.Printf("[INFO] dropping leftover routes table\n")
 
 						err := tx.Exec("DROP TABLE routes").Error
 						if err != nil {
@@ -437,11 +436,11 @@ AND auth_key_id NOT IN (
 					for _, table := range tablesToRename {
 						err := tx.Exec("DROP TABLE IF EXISTS " + table + "_old").Error
 						if err != nil {
-							log.Warn().Str("table", table+"_old").Err(err).Msg("failed to drop old table, but migration succeeded")
+							fmt.Printf("[WARN] failed to drop old table %s_old, but migration succeeded: %v\n", table, err)
 						}
 					}
 
-					log.Info().Msg("schema recreation completed successfully")
+					fmt.Printf("[INFO] schema recreation completed successfully\n")
 
 					return nil
 				},
@@ -454,12 +453,7 @@ AND auth_key_id NOT IN (
 				ID: "202510311551",
 				Migrate: func(tx *gorm.DB) error {
 					for _, oldTable := range []string{"namespaces", "machines", "shared_machines", "kvs", "pre_auth_key_acl_tags", "routes"} {
-						err := tx.Migrator().DropTable(oldTable)
-						if err != nil {
-							log.Trace().Str("table", oldTable).
-								Err(err).
-								Msg("Error dropping old table, continuing...")
-						}
+						_ = tx.Migrator().DropTable(oldTable)
 					}
 
 					return nil
@@ -480,14 +474,7 @@ AND auth_key_id NOT IN (
 						{"idx_routes_deleted_at", "routes"},
 						{"idx_shared_machines_deleted_at", "shared_machines"},
 					} {
-						err := tx.Migrator().DropIndex(oldIdx.table, oldIdx.name)
-						if err != nil {
-							log.Trace().
-								Str("index", oldIdx.name).
-								Str("table", oldIdx.table).
-								Err(err).
-								Msg("Error dropping old index, continuing...")
-						}
+						_ = tx.Migrator().DropIndex(oldIdx.table, oldIdx.name)
 					}
 
 					return nil
@@ -607,12 +594,12 @@ AND auth_key_id NOT IN (
 					// 1. Load policy from file or database based on configuration
 					policyData, err := PolicyBytes(tx, cfg)
 					if err != nil {
-						log.Warn().Err(err).Msg("failed to load policy, skipping RequestTags migration (tags will be validated on node reconnect)")
+						fmt.Printf("[WARN] failed to load policy, skipping RequestTags migration (tags will be validated on node reconnect): %v\n", err)
 						return nil
 					}
 
 					if len(policyData) == 0 {
-						log.Info().Msg("no policy found, skipping RequestTags migration (tags will be validated on node reconnect)")
+						fmt.Printf("[INFO] no policy found, skipping RequestTags migration (tags will be validated on node reconnect)\n")
 						return nil
 					}
 
@@ -630,7 +617,7 @@ AND auth_key_id NOT IN (
 					// 3. Create PolicyManager (handles HuJSON parsing, groups, nested tags, etc.)
 					polMan, err := policy.NewPolicyManager(policyData, users, nodes.ViewSlice())
 					if err != nil {
-						log.Warn().Err(err).Msg("failed to parse policy, skipping RequestTags migration (tags will be validated on node reconnect)")
+						fmt.Printf("[WARN] failed to parse policy, skipping RequestTags migration (tags will be validated on node reconnect): %v\n", err)
 						return nil
 					}
 
@@ -662,13 +649,6 @@ AND auth_key_id NOT IN (
 						}
 
 						if len(validatedTags) == 0 {
-							if len(rejectedTags) > 0 {
-								log.Debug().
-									EmbedObject(node).
-									Strs("rejected_tags", rejectedTags).
-									Msg("RequestTags rejected during migration (not authorized)")
-							}
-
 							continue
 						}
 
@@ -686,13 +666,7 @@ AND auth_key_id NOT IN (
 							return fmt.Errorf("updating tags for node %d: %w", node.ID, err)
 						}
 
-						log.Info().
-							EmbedObject(node).
-							Strs("validated_tags", validatedTags).
-							Strs("rejected_tags", rejectedTags).
-							Strs("existing_tags", existingTags).
-							Strs("merged_tags", mergedTags).
-							Msg("Migrated validated RequestTags from host_info to tags column")
+						fmt.Printf("[INFO] Migrated validated RequestTags from host_info to tags column: validated=%v rejected=%v existing=%v merged=%v\n", validatedTags, rejectedTags, existingTags, mergedTags)
 					}
 
 					return nil
@@ -841,10 +815,9 @@ WHERE tags IS NOT NULL AND tags != '[]' AND tags != '';
 }
 
 func openDB(cfg types.DatabaseConfig) (*gorm.DB, error) {
-	// TODO(kradalby): Integrate this with zerolog
 	var dbLogger logger.Interface
 	if cfg.Debug {
-		dbLogger = util.NewDBLogWrapper(&log.Logger, cfg.Gorm.SlowThreshold, cfg.Gorm.SkipErrRecordNotFound, cfg.Gorm.ParameterizedQueries)
+		dbLogger = util.NewDBLogWrapper(cfg.Gorm.SlowThreshold, cfg.Gorm.SkipErrRecordNotFound, cfg.Gorm.ParameterizedQueries)
 	} else {
 		dbLogger = logger.Default.LogMode(logger.Silent)
 	}
@@ -858,10 +831,7 @@ func openDB(cfg types.DatabaseConfig) (*gorm.DB, error) {
 			return nil, fmt.Errorf("creating directory for sqlite: %w", err)
 		}
 
-		log.Info().
-			Str("database", types.DatabaseSqlite).
-			Str("path", cfg.Sqlite.Path).
-			Msg("Opening database")
+		fmt.Printf("[INFO] Opening database: type=%s path=%s\n", types.DatabaseSqlite, cfg.Sqlite.Path)
 
 		// Build SQLite configuration with pragmas set at connection time
 		sqliteConfig := sqliteconfig.Default(cfg.Sqlite.Path)
@@ -901,10 +871,7 @@ func openDB(cfg types.DatabaseConfig) (*gorm.DB, error) {
 			cfg.Postgres.User,
 		)
 
-		log.Info().
-			Str("database", types.DatabasePostgres).
-			Str("path", dbString).
-			Msg("Opening database")
+		fmt.Printf("[INFO] Opening database: type=%s path=%s\n", types.DatabasePostgres, dbString)
 
 		if sslEnabled, err := strconv.ParseBool(cfg.Postgres.Ssl); err == nil { //nolint:noinlineerr
 			if !sslEnabled {
@@ -985,7 +952,6 @@ func runMigrations(cfg types.DatabaseConfig, dbConn *gorm.DB, migrations *gormig
 		}
 
 		for _, migrationID := range migrationIDs {
-			log.Trace().Caller().Str("migration_id", migrationID).Msg("running migration")
 			needsFKDisabled := migrationsRequiringFKDisabled[migrationID]
 
 			if needsFKDisabled {
@@ -1051,11 +1017,7 @@ func runMigrations(cfg types.DatabaseConfig, dbConn *gorm.DB, migrations *gormig
 
 		if len(violatedConstraints) > 0 {
 			for _, violation := range violatedConstraints {
-				log.Error().
-					Str("table", violation.Table).
-					Int("row_id", violation.RowID).
-					Str("parent", violation.Parent).
-					Msg("Foreign key constraint violated")
+				fmt.Printf("[ERROR] Foreign key constraint violated: table=%s row_id=%d parent=%s\n", violation.Table, violation.RowID, violation.Parent)
 			}
 
 			return errForeignKeyConstraintsViolated

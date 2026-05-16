@@ -8,10 +8,9 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/go-kratos/kratos/v2/log"
 	"github.com/juanfont/headscale-v2/internal/types"
 	"github.com/puzpuzpuz/xsync/v4"
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"tailscale.com/tailcfg"
 )
 
@@ -32,7 +31,7 @@ type connectionEntry struct {
 type multiChannelNodeConn struct {
 	id     types.NodeID
 	mapper *Mapper
-	log    zerolog.Logger
+	log    *log.Helper
 
 	mutex       sync.RWMutex
 	connections []*connectionEntry
@@ -60,7 +59,7 @@ func newMultiChannelNodeConn(id types.NodeID, mapper *Mapper) *multiChannelNodeC
 		id:            id,
 		mapper:        mapper,
 		lastSentPeers: xsync.NewMap[tailcfg.NodeID, struct{}](),
-		log:           log.With().Uint64("node_id", id.Uint64()).Logger(),
+		log:           log.NewHelper(log.With(log.DefaultLogger, "node_id", id.Uint64())),
 	}
 }
 

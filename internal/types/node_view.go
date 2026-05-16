@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/juanfont/headscale-v2/internal/policy/matcher"
-	"github.com/rs/zerolog"
 	"go4.org/netipx"
 	"tailscale.com/tailcfg"
 	"tailscale.com/types/key"
@@ -249,14 +248,6 @@ func (nv NodeView) HasPolicyChange(other NodeView) bool {
 		return true
 	}
 	return false
-}
-
-// MarshalZerologObject implements zerolog.LogObjectMarshaler for NodeView.
-func (nv NodeView) MarshalZerologObject(e *zerolog.Event) {
-	if !nv.Valid() {
-		return
-	}
-	nv.ж.MarshalZerologObject(e)
 }
 
 // equalPrefixesUnordered reports whether a and b contain the same prefixes, order-independent.

@@ -4,8 +4,6 @@ import (
 	"time"
 
 	v1 "github.com/juanfont/headscale-v2/api/proto/v1"
-	"github.com/juanfont/headscale-v2/internal/util/zlog/zf"
-	"github.com/rs/zerolog"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -65,24 +63,4 @@ func (k *APIKey) maskedPrefix() string {
 	}
 
 	return k.Prefix + "***"
-}
-
-// MarshalZerologObject implements zerolog.LogObjectMarshaler for safe logging.
-// SECURITY: This method intentionally does NOT log the full key or hash.
-// Only the masked prefix is logged for identification purposes.
-func (k *APIKey) MarshalZerologObject(e *zerolog.Event) {
-	if k == nil {
-		return
-	}
-
-	e.Uint64(zf.APIKeyID, k.ID)
-	e.Str(zf.APIKeyPrefix, k.maskedPrefix())
-
-	if k.Expiration != nil {
-		e.Time(zf.APIKeyExpiration, *k.Expiration)
-	}
-
-	if k.LastSeen != nil {
-		e.Time(zf.APIKeyLastSeen, *k.LastSeen)
-	}
 }

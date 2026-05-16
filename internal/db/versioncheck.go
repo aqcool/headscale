@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/juanfont/headscale-v2/internal/types"
-	"github.com/rs/zerolog/log"
 	"gorm.io/gorm"
 )
 
@@ -172,10 +171,7 @@ func checkVersionUpgradePath(db *gorm.DB) error {
 		}
 
 		if storedVersion != "" && !isDev(storedVersion) {
-			log.Warn().
-				Str("database_version", storedVersion).
-				Msg("running a development build of headscale without a version number, " +
-					"database version check is skipped, the stored database version is preserved")
+			fmt.Printf("[WARN] running a development build of headscale without a version number, database version check is skipped, the stored database version is preserved: database_version=%s\n", storedVersion)
 		}
 
 		return nil

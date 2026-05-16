@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/juanfont/headscale-v2/internal/types"
-	"github.com/rs/zerolog/log"
 	"tailscale.com/tailcfg"
 )
 
@@ -42,10 +41,10 @@ func httpError(w http.ResponseWriter, err error) {
 	var herr HTTPError
 	if errors.As(err, &herr) {
 		http.Error(w, herr.Msg, herr.Code)
-		log.Error().Err(herr.Err).Int("code", herr.Code).Msgf("user msg: %s", herr.Msg)
+		fmt.Printf("[ERROR] http error: code=%d, msg=%s, err=%v\n", herr.Code, herr.Msg, herr.Err)
 	} else {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
-		log.Error().Err(err).Int("code", http.StatusInternalServerError).Msg("http internal server error")
+		fmt.Printf("[ERROR] http internal server error: %v\n", err)
 	}
 }
 
@@ -79,7 +78,7 @@ func (s *HeadscaleServer) KeyHandler(writer http.ResponseWriter, req *http.Reque
 
 		err := json.NewEncoder(writer).Encode(resp)
 		if err != nil {
-			log.Error().Err(err).Msg("failed to encode public key response")
+			fmt.Printf("[ERROR] %s: %v\n", "failed to encode public key response", err)
 		}
 
 		return
@@ -105,7 +104,7 @@ func (s *HeadscaleServer) HealthHandler(writer http.ResponseWriter, req *http.Re
 
 		encErr := json.NewEncoder(writer).Encode(res)
 		if encErr != nil {
-			log.Error().Err(encErr).Msg("failed to encode health response")
+			fmt.Printf("[ERROR] failed to encode health response: %v\n", encErr)
 		}
 	}
 
@@ -118,7 +117,7 @@ func (s *HeadscaleServer) RobotsHandler(writer http.ResponseWriter, req *http.Re
 
 	_, err := writer.Write([]byte("User-agent: *\nDisallow: /"))
 	if err != nil {
-		log.Error().Err(err).Msg("Failed to write robots.txt")
+		fmt.Printf("[ERROR] %s: %v\n", "Failed to write robots.txt", err)
 	}
 }
 
@@ -136,7 +135,7 @@ func (s *HeadscaleServer) VersionHandler(writer http.ResponseWriter, req *http.R
 
 	err := json.NewEncoder(writer).Encode(versionInfo)
 	if err != nil {
-		log.Error().Err(err).Msg("Failed to write version response")
+		fmt.Printf("[ERROR] %s: %v\n", "Failed to write version response", err)
 	}
 }
 
@@ -163,7 +162,7 @@ func BlankHandler(writer http.ResponseWriter, req *http.Request) {
 
 	_, err := writer.Write([]byte("<html><body><h1>Headscale v2</h1></body></html>"))
 	if err != nil {
-		log.Error().Err(err).Msg("Failed to write blank response")
+		fmt.Printf("[ERROR] %s: %v\n", "Failed to write blank response", err)
 	}
 }
 
@@ -204,7 +203,7 @@ func (a *AuthProviderWeb) AuthHandler(writer http.ResponseWriter, req *http.Requ
 	html := fmt.Sprintf(`<html><body><h1>Authentication</h1><p>Run: headscale auth approve --auth-id %s</p></body></html>`, authID)
 	_, err := writer.Write([]byte(html))
 	if err != nil {
-		log.Error().Err(err).Msg("failed to write auth response")
+		fmt.Printf("[ERROR] %s: %v\n", "failed to write auth response", err)
 	}
 }
 
@@ -221,6 +220,6 @@ func (a *AuthProviderWeb) RegisterHandler(writer http.ResponseWriter, req *http.
 	html := fmt.Sprintf(`<html><body><h1>Node registration</h1><p>Run: headscale auth register --auth-id %s --user USERNAME</p></body></html>`, authID)
 	_, err := writer.Write([]byte(html))
 	if err != nil {
-		log.Error().Err(err).Msg("failed to write register response")
+		fmt.Printf("[ERROR] %s: %v\n", "failed to write register response", err)
 	}
 }

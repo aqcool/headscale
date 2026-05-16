@@ -10,8 +10,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 )
 
@@ -275,7 +273,7 @@ func (p *PolicyConfig) IsEmpty() bool {
 
 type LogConfig struct {
 	Format string
-	Level  zerolog.Level
+	Level  string
 }
 
 type TuningConfig struct {
@@ -373,7 +371,6 @@ func LoadConfig(path string, isFile bool) error {
 	err := viper.ReadInConfig()
 	if err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			log.Warn().Msg("no config file found, using defaults")
 			return nil
 		}
 		return fmt.Errorf("fatal error reading config file: %w", err)
@@ -402,11 +399,7 @@ func resolveNodeExpiry() time.Duration {
 
 func LoadServerConfig() (*Config, error) {
 	logLevelStr := viper.GetString("log.level")
-	logLevel, err := zerolog.ParseLevel(logLevelStr)
-	if err != nil {
-		logLevel = zerolog.InfoLevel
-	}
-	zerolog.SetGlobalLevel(logLevel)
+	logLevel := parseLogLevel(logLevelStr)
 
 	logFormat := viper.GetString("log.format")
 	if logFormat != "json" && logFormat != "text" {
@@ -472,7 +465,6 @@ func LoadServerConfig() (*Config, error) {
 	if permStr := viper.GetString("unix_socket_permission"); permStr != "" {
 		if strings.HasPrefix(permStr, "0o") || strings.HasPrefix(permStr, "0") {
 			if _, err := fmt.Sscanf(permStr, "%o", &unixSocketPerm); err != nil {
-				log.Warn().Err(err).Msg("invalid unix_socket_permission, using default")
 			}
 		}
 	}
@@ -638,11 +630,7 @@ func LoadServerConfig() (*Config, error) {
 
 func LoadCLIConfig() (*Config, error) {
 	logLevelStr := viper.GetString("log.level")
-	logLevel, err := zerolog.ParseLevel(logLevelStr)
-	if err != nil {
-		logLevel = zerolog.InfoLevel
-	}
-	zerolog.SetGlobalLevel(logLevel)
+	logLevel := parseLogLevel(logLevelStr)
 
 	return &Config{
 		DisableUpdateCheck: viper.GetBool("disable_check_updates"),
@@ -682,4 +670,13 @@ func max[T int](a, b T) T {
 		return a
 	}
 	return b
+}
+
+func parseLogLevel(level string) string {
+	switch strings.ToLower(level) {
+	case "trace", "debug", "info", "warn", "error":
+		return strings.ToLower(level)
+	default:
+		return "info"
+	}
 }

@@ -6,7 +6,6 @@ import (
 
 	"github.com/juanfont/headscale-v2/internal/types"
 	"github.com/juanfont/headscale-v2/internal/util"
-	"github.com/rs/zerolog/log"
 	"go4.org/netipx"
 	"tailscale.com/tailcfg"
 	"tailscale.com/types/views"
@@ -116,8 +115,6 @@ func (pol *Policy) compileGrants(
 	for _, grant := range grants {
 		cg, err := pol.compileOneGrant(grant, users, nodes)
 		if err != nil {
-			log.Trace().Err(err).Msg("compiling grant")
-
 			continue
 		}
 
@@ -287,11 +284,7 @@ func resolveSources(
 			return nil, nil, errSelfInSources
 		}
 
-		ips, err := src.Resolve(pol, users, nodes)
-		if err != nil {
-			log.Trace().Caller().Err(err).
-				Msg("resolving source ips")
-		}
+		ips, _ := src.Resolve(pol, users, nodes)
 
 		if ips != nil {
 			all = append(all, ips)

@@ -11,7 +11,6 @@ import (
 
 	"github.com/cenkalti/backoff/v5"
 	"github.com/fsnotify/fsnotify"
-	"github.com/rs/zerolog/log"
 	"tailscale.com/tailcfg"
 	"tailscale.com/util/set"
 )
@@ -67,8 +66,6 @@ func NewExtraRecordsManager(path string) (*ExtraRecordsMan, error) {
 		return nil, fmt.Errorf("adding path to watcher: %w", err)
 	}
 
-	log.Trace().Caller().Strs("watching", watcher.WatchList()).Msg("started filewatcher")
-
 	return er, nil
 }
 
@@ -86,13 +83,12 @@ func (e *ExtraRecordsMan) Run() {
 			return
 		case event, ok := <-e.watcher.Events:
 			if !ok {
-				log.Error().Caller().Msgf("file watcher event channel closing")
+				fmt.Printf("[ERROR] file watcher event channel closing\n")
 				return
 			}
 
 			switch event.Op {
 			case fsnotify.Create, fsnotify.Write, fsnotify.Chmod:
-				log.Trace().Caller().Str("path", event.Name).Str("op", event.Op.String()).Msg("extra records received filewatch event")
 
 				if event.Name != e.path {
 					continue
@@ -111,27 +107,26 @@ func (e *ExtraRecordsMan) Run() {
 					return struct{}{}, nil
 				}, backoff.WithBackOff(backoff.NewExponentialBackOff()))
 				if err != nil {
-					log.Error().Caller().Err(err).Msgf("extra records filewatcher retrying to find file after delete")
+					fmt.Printf("[ERROR] extra records filewatcher retrying to find file after delete: %v\n", err)
 					continue
 				}
 
 				err = e.watcher.Add(e.path)
 				if err != nil {
-					log.Error().Caller().Err(err).Msgf("extra records filewatcher re-adding file after delete failed, giving up.")
+					fmt.Printf("[ERROR] extra records filewatcher re-adding file after delete failed, giving up: %v\n", err)
 					return
 				} else {
-					log.Trace().Caller().Str("path", e.path).Msg("extra records file re-added after delete")
 					e.updateRecords()
 				}
 			}
 
 		case err, ok := <-e.watcher.Errors:
 			if !ok {
-				log.Error().Caller().Msgf("file watcher error channel closing")
+				fmt.Printf("[ERROR] file watcher error channel closing\n")
 				return
 			}
 
-			log.Error().Caller().Err(err).Msgf("extra records filewatcher returned error: %q", err)
+			fmt.Printf("[ERROR] extra records filewatcher returned error: %q\n", err)
 		}
 	}
 }
@@ -148,7 +143,7 @@ func (e *ExtraRecordsMan) UpdateCh() <-chan []tailcfg.DNSRecord {
 func (e *ExtraRecordsMan) updateRecords() {
 	records, newHash, err := readExtraRecordsFromPath(e.path)
 	if err != nil {
-		log.Error().Caller().Err(err).Msgf("reading extra records from path: %s", e.path)
+		fmt.Printf("[ERROR] reading extra records from path: %s: %v\n", e.path, err)
 		return
 	}
 
@@ -167,12 +162,8 @@ func (e *ExtraRecordsMan) updateRecords() {
 		}
 	}
 
-	oldCount := e.records.Len()
-
 	e.records = set.SetOf(records)
 	e.hashes[e.path] = newHash
-
-	log.Trace().Caller().Interface("records", e.records).Msgf("extra records updated from path, count old: %d, new: %d", oldCount, e.records.Len())
 
 	e.updateCh <- e.records.Slice()
 }
